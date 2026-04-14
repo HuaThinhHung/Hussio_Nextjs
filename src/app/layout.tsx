@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Be_Vietnam_Pro, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -7,13 +7,14 @@ import AnnouncementBar from "@/components/layout/AnnouncementBar";
 import BackToTopButton from "@/components/common/BackToTopButton";
 import { seoConfig, siteConfig } from "@/config/site";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const beVietnamPro = Be_Vietnam_Pro({
+  variable: "--font-sans",
+  subsets: ["latin", "vietnamese"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+  variable: "--font-mono",
   subsets: ["latin"],
 });
 
@@ -31,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi" className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <html lang="vi" className={`${beVietnamPro.variable} ${geistMono.variable} antialiased`}>
       <body className="min-h-screen bg-white text-black selection:bg-black selection:text-white">
         <AnnouncementBar />
         <Header />

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import HeroSlider from '@/sections/home/HeroSlider';
 import CategoryGrid from '@/sections/home/CategoryGrid';
+import CollectionBanners from '@/sections/home/CollectionBanners';
 import ProductSection from '@/sections/home/ProductSection';
 import BannerSection from '@/sections/home/BannerSection';
 import { products } from '@/mock/products';
@@ -20,10 +21,11 @@ export default function Home() {
   return (
     <div className="flex flex-col w-full overflow-hidden">
       <HeroSlider />
+      
       <section className="container mx-auto px-4 py-10 md:py-12">
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-500">Official brand</p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-500">Thương hiệu chính thức</p>
             <h1 className="mt-2 text-2xl font-black uppercase tracking-tight md:text-4xl">
               {siteConfig.brandName} Men's Office Wear
             </h1>
@@ -33,6 +35,7 @@ export default function Home() {
       </section>
       <TrustBadge />
       <CategoryGrid />
+      <CollectionBanners />
 
       <div className="container mx-auto px-4 pt-2 pb-2 md:pt-4">
         <div className="relative h-20 md:h-28 flex items-center justify-center overflow-hidden border-y border-zinc-200">
@@ -55,8 +58,8 @@ export default function Home() {
       <div className="animate-fade-in">
         <BannerSection 
           title="HUSSIO OFFICE COLLECTION"
-          subtitle="Trang phuc cong so toi gian, de phoi do va de su dung moi ngay."
-          image="https://images.unsplash.com/photo-1473966968600-fa801b869a1a?q=80&w=2200&auto=format&fit=crop"
+          subtitle="Phong cách là cách bạn thể hiện bản thân mà không cần lên tiếng."
+          image="/images/banner/4.jpg"
           buttonText="XEM TẤT CẢ"
           link="/products"
         />
@@ -70,19 +73,46 @@ export default function Home() {
       </div>
 
       <section className="container mx-auto px-4 py-16 border-t border-zinc-200 animate-fade-in">
-        <div className="text-center mb-12">
-          <h2 className="text-[11px] font-semibold tracking-[0.28em] uppercase opacity-60">LOOKBOOK KHÁCH HÀNG</h2>
+        <div className="text-center mb-10">
+          <h2 className="text-black font-semibold tracking-[0.28em] uppercase opacity-70">
+            Feedback khách hàng
+          </h2>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-2 md:gap-3">
-          {[1,2,3,4,5,6].map(i => (
-            <div key={i} className="aspect-square bg-zinc-100 overflow-hidden grayscale hover:grayscale-0 border border-zinc-200 transition-all duration-500">
-              <img 
-                src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=800&auto=format&fit=crop" 
-                alt="feedback"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          ))}
+        <div className="relative overflow-hidden border border-zinc-200 bg-white">
+          <div className="flex gap-2 md:gap-3 py-2 md:py-3 animate-marquee [animation-duration:55s] hover:[animation-play-state:paused]">
+            {[...Array(12)].map((_, idx) => {
+              const i = idx + 1;
+              return (
+                <div
+                  key={`fb-a-${i}`}
+                  className="h-[130px] w-[200px] md:h-[160px] md:w-[250px] lg:h-[190px] lg:w-[300px] shrink-0 bg-zinc-100 overflow-hidden transition-all duration-500"
+                >
+                  <img
+                    src={`/images/feeback/${i}.jpg`}
+                    alt={`feedback ${i}`}
+                    className="h-full w-full object-cover brightness-[1.06] contrast-[1.04] transition-transform duration-700 hover:scale-[1.03]"
+                    loading="lazy"
+                  />
+                </div>
+              );
+            })}
+            {[...Array(12)].map((_, idx) => {
+              const i = idx + 1;
+              return (
+                <div
+                  key={`fb-b-${i}`}
+                  className="h-[130px] w-[200px] md:h-[160px] md:w-[250px] lg:h-[190px] lg:w-[300px] shrink-0 bg-zinc-100 overflow-hidden transition-all duration-500"
+                >
+                  <img
+                    src={`/images/feeback/${i}.jpg`}
+                    alt={`feedback ${i}`}
+                    className="h-full w-full object-cover brightness-[1.06] contrast-[1.04] transition-transform duration-700 hover:scale-[1.03]"
+                    loading="lazy"
+                  />
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
 

@@ -25,7 +25,7 @@ const Header = () => {
         isScrolled ? "bg-white/95 backdrop-blur-md border-zinc-200 h-16" : "bg-white border-zinc-100 h-[72px]"
       )}
     >
-      <div className="container mx-auto h-full px-4 lg:px-8 grid grid-cols-3 items-center gap-2">
+      <div className="container mx-auto h-full px-4 lg:px-8 grid grid-cols-[1fr_auto_1fr] items-center gap-2">
         <div className="flex items-center">
           <button className="md:hidden p-2 -ml-2" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" /></svg>
@@ -34,9 +34,11 @@ const Header = () => {
             {navLinks.map((link) => (
               <Link
                 key={link.name} href={link.href}
-                className="hover:text-zinc-500 transition-colors flex items-center h-full"
+                className="group relative inline-flex items-center h-full px-0.5 text-black whitespace-nowrap transition-colors duration-200 hover:text-zinc-500"
               >
-                <span>{link.name}</span>
+                <span className="relative after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-[3px] after:bg-current after:opacity-90 after:origin-left after:scale-x-0 after:transition-transform after:duration-300 after:[transition-timing-function:cubic-bezier(0.16,1,0.3,1)] group-hover:after:scale-x-100">
+                  {link.name}
+                </span>
               </Link>
             ))}
           </nav>
@@ -47,7 +49,7 @@ const Header = () => {
         </div>
 
         <div className="flex items-center justify-end space-x-2 md:space-x-4">
-          <Link href="/login" className="p-2 hover:bg-zinc-100 rounded-full transition-colors hidden md:block" aria-label="Login">
+          <Link href="/login" className="p-2 hover:bg-zinc-100 rounded-full transition-colors hidden md:block" aria-label="Đăng nhập">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
           </Link>
           <Link href="/cart" className="p-2 hover:bg-zinc-100 rounded-full transition-colors relative flex items-center">
@@ -72,7 +74,12 @@ const Header = () => {
             </div>
             <nav aria-label="Mobile navigation" className="flex flex-col space-y-6 text-[10px] font-semibold tracking-[0.18em] uppercase">
               {navLinks.map((link) => (
-                <Link key={link.name} href={link.href} className="flex justify-between items-center transition-all duration-300 border-b border-zinc-100 pb-4 hover:pl-2" onClick={() => setIsMobileMenuOpen(false)}>
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className="flex justify-between items-center transition-all duration-300 border-b border-zinc-100 pb-4 hover:pl-2 hover:text-zinc-500"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
                   <span>{link.name}</span>
                 </Link>
               ))}

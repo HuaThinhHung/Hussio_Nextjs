@@ -13,6 +13,9 @@ export interface Product {
 
 const PLACEHOLDER_IMAGE = "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1000&auto=format&fit=crop"; // Minimal White Tee
 const PLACEHOLDER_HOVER = "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?q=80&w=1000&auto=format&fit=crop"; // Minimal Black Tee
+const PLACEHOLDER_IMAGE_ao = "/images/tee.webp";
+const PLACEHOLDER_IMAGE_quan = "/images/short.webp";
+const PLACEHOLDER_IMAGE_phukien = "/images/phukien.webp";
 
 export const products: Product[] = [
   {
@@ -90,7 +93,7 @@ export const products: Product[] = [
 ];
 
 export const categories = [
-  { title: "ÁO", image: PLACEHOLDER_IMAGE, link: "/products?category=ao" },
-  { title: "QUẦN", image: PLACEHOLDER_IMAGE, link: "/products?category=quan" },
-  { title: "PHỤ KIỆN", image: PLACEHOLDER_IMAGE, link: "/products?category=phu-kien" }
+  { title: "ÁO", image: PLACEHOLDER_IMAGE_ao, link: "/products?category=ao" },
+  { title: "QUẦN", image: PLACEHOLDER_IMAGE_quan, link: "/products?category=quan" },
+  { title: "PHỤ KIỆN", image: PLACEHOLDER_IMAGE_phukien, link: "/products?category=phu-kien" }
 ];

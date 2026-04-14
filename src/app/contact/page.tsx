@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 const contacts = [
-  { label: "Address", value: siteConfig.address.full, href: null },
+  { label: "Địa chỉ", value: siteConfig.address.full, href: null },
   { label: "Facebook", value: siteConfig.social.facebook, href: siteConfig.social.facebook },
   { label: "Shopee", value: siteConfig.social.shopee, href: siteConfig.social.shopee },
   { label: "TikTok", value: siteConfig.social.tiktok, href: siteConfig.social.tiktok },
@@ -19,14 +19,14 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-white">
       <section className="container mx-auto px-4 py-12 md:py-20">
-        <h1 className="text-3xl font-black uppercase tracking-tight md:text-4xl">Contact HUSSIO</h1>
+        <h1 className="text-3xl font-black uppercase tracking-tight md:text-4xl">LIÊN HỆ HUSSIO</h1>
         <p className="mt-3 max-w-2xl text-sm text-zinc-600 md:text-base">
-          We use this website for branding, SEO visibility, and customer trust. Main sales channels remain official marketplaces and social platforms.
+          Website này giúp tăng nhận diện thương hiệu, SEO và độ tin cậy. Kênh mua sắm chính vẫn là các sàn TMĐT và mạng xã hội chính thức của HUSSIO.
         </p>
 
         <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-12">
           <section className="lg:col-span-5">
-            <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">Company Information</h2>
+            <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">Thông tin liên hệ</h2>
             <ul className="mt-6 space-y-5">
               {contacts.map((item) => (
                 <li key={item.label} className="flex items-start gap-3 border-b border-zinc-200 pb-4">
@@ -36,7 +36,7 @@ export default function ContactPage() {
                       strokeLinejoin="round"
                       strokeWidth={1.4}
                       d={
-                        item.label === "Address"
+                        item.label === "Địa chỉ"
                           ? "M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"
                           : item.label === "Facebook"
                             ? "M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"
@@ -65,16 +65,16 @@ export default function ContactPage() {
           </section>
 
           <section className="lg:col-span-7">
-            <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">Send Us A Message</h2>
+            <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">Gửi tin nhắn cho HUSSIO</h2>
             <form className="mt-6 space-y-4 border border-zinc-200 p-6 md:p-8">
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <input className="h-11 border border-zinc-300 px-3 text-sm focus:border-black focus:outline-none" placeholder="Your name" />
-                <input className="h-11 border border-zinc-300 px-3 text-sm focus:border-black focus:outline-none" placeholder="Phone number" />
+                <input className="h-11 border border-zinc-300 px-3 text-sm focus:border-black focus:outline-none" placeholder="Họ và tên" />
+                <input className="h-11 border border-zinc-300 px-3 text-sm focus:border-black focus:outline-none" placeholder="Số điện thoại" />
               </div>
               <input className="h-11 w-full border border-zinc-300 px-3 text-sm focus:border-black focus:outline-none" placeholder="Email" />
-              <textarea className="min-h-32 w-full border border-zinc-300 p-3 text-sm focus:border-black focus:outline-none" placeholder="Tell us how we can help" />
+              <textarea className="min-h-32 w-full border border-zinc-300 p-3 text-sm focus:border-black focus:outline-none" placeholder="Nội dung bạn cần hỗ trợ" />
               <button type="submit" className="inline-flex h-11 items-center justify-center border border-black bg-black px-6 text-xs font-semibold uppercase tracking-[0.14em] text-white hover:bg-zinc-800">
-                Send Message
+                Gửi tin nhắn
               </button>
             </form>
           </section>

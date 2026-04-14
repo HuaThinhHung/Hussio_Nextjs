@@ -11,9 +11,9 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-white">
       <section className="container mx-auto max-w-md px-4 py-14 md:py-20">
-        <h1 className="text-3xl font-black uppercase tracking-tight">Login</h1>
+        <h1 className="text-3xl font-black uppercase tracking-tight">Đăng nhập</h1>
         <p className="mt-3 text-sm text-zinc-600">
-          Welcome back to {siteConfig.brandName}. Sign in to continue shopping.
+          Chào mừng bạn quay lại {siteConfig.brandName}. Đăng nhập để tiếp tục mua sắm.
         </p>
 
         <form className="mt-8 space-y-4 border border-zinc-200 p-6">
@@ -31,13 +31,13 @@ export default function LoginPage() {
 
           <div>
             <label htmlFor="password" className="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
-              Password
+              Mật khẩu
             </label>
             <input
               id="password"
               type="password"
               className="h-11 w-full border border-zinc-300 px-3 text-sm focus:border-black focus:outline-none"
-              placeholder="Enter password"
+              placeholder="Nhập mật khẩu"
             />
           </div>
 
@@ -45,14 +45,14 @@ export default function LoginPage() {
             type="submit"
             className="mt-2 inline-flex h-11 w-full items-center justify-center border border-black bg-black text-xs font-semibold uppercase tracking-[0.14em] text-white hover:bg-zinc-800"
           >
-            Sign in
+            Đăng nhập
           </button>
         </form>
 
         <p className="mt-5 text-sm text-zinc-600">
-          Don&apos;t have an account?{" "}
+          Bạn chưa có tài khoản?{" "}
           <Link href="/register" className="font-semibold text-black underline underline-offset-4">
-            Register
+            Đăng ký
           </Link>
         </p>
       </section>

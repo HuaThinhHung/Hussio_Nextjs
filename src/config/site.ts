@@ -1,16 +1,16 @@
 export const siteConfig = {
   brandName: "HUSSIO",
-  industry: "Men's Fashion (Office Wear)",
-  style: "Minimal, modern, masculine",
+  industry: "Thời trang nam (Công sở)",
+  style: "Tối giản, hiện đại, nam tính",
   description:
-    "HUSSIO is a modern menswear brand focused on clean and confident office wear for Vietnamese professionals.",
+    "HUSSIO là thương hiệu thời trang nam hiện đại, tập trung vào trang phục công sở tối giản và chỉn chu cho người Việt.",
   address: {
     street: "318/6 Truong Thi Hoa",
-    ward: "Tan Thoi Hiep Ward",
-    district: "District 12",
-    city: "Ho Chi Minh City",
-    country: "Vietnam",
-    full: "318/6 Truong Thi Hoa, Tan Thoi Hiep Ward, District 12, Ho Chi Minh City, Vietnam",
+    ward: "Phường Tân Thới Hiệp",
+    district: "Quận 12",
+    city: "TP. Hồ Chí Minh",
+    country: "Việt Nam",
+    full: "318/6 Trương Thị Hoa, Phường Tân Thới Hiệp, Quận 12, TP. Hồ Chí Minh, Việt Nam",
   },
   social: {
     facebook: "https://www.facebook.com/HUSSIO.vn",
@@ -18,41 +18,57 @@ export const siteConfig = {
     tiktok: "https://www.tiktok.com/@hussio.official",
   },
   navigation: [
-    { name: "Home", href: "/" },
-    { name: "Products", href: "/products" },
-    { name: "Blog", href: "/blog" },
-    { name: "Contact", href: "/contact" },
+    { name: "NEW-IN", href: "/new-in" },
+    { name: "SẢN PHẨM MỚI", href: "/products" },
+    { name: "BỘ SƯU TẬP MỚI", href: "/collections" },
+    { name: "LIÊN HỆ", href: "/contact" },
+    { name: "SALE 50%", href: "/sale" },
   ],
   trustBadges: [
-    "Free shipping",
-    "Easy returns",
-    "Official store",
-    "Secure shopping",
+    "Miễn phí vận chuyển",
+    "Trả hàng dễ dàng",
+    "Cửa hàng chính thức",
+    "Mua sắm an toàn",
   ],
 } as const;
 
 export const seoConfig = {
   home: {
-    title: "HUSSIO | Men's Office Wear Vietnam",
+    title: "HUSSIO | Thời trang công sở nam",
     description:
-      "HUSSIO delivers modern and minimal office wear for men. Explore trusted brand information, product highlights, and official social channels.",
+      "HUSSIO mang đến thời trang công sở nam tối giản và hiện đại. Khám phá thông tin thương hiệu, sản phẩm nổi bật và các kênh chính thức.",
+  },
+  newIn: {
+    title: "Hàng mới về | HUSSIO",
+    description:
+      "Khám phá các sản phẩm mới nhất từ HUSSIO. Tối giản, hiện đại, dễ mặc mỗi ngày.",
+  },
+  collections: {
+    title: "Bộ sưu tập | HUSSIO",
+    description:
+      "Khám phá các bộ sưu tập được tuyển chọn cho tủ đồ công sở chỉn chu và tự tin.",
+  },
+  sale: {
+    title: "Khuyến mãi | HUSSIO",
+    description:
+      "Ưu đãi có thời hạn từ HUSSIO. Mua sắm các sản phẩm chọn lọc với mức giá tốt.",
   },
   about: {
-    title: "About HUSSIO | Modern Office Fashion For Men",
+    title: "Về HUSSIO | Thời trang công sở nam hiện đại",
     description:
-      "Learn who HUSSIO is, our mission, and our clean and confident menswear philosophy for modern office life.",
+      "Tìm hiểu về HUSSIO, sứ mệnh và triết lý thời trang tối giản, chỉn chu cho cuộc sống công sở hiện đại.",
   },
   contact: {
-    title: "Contact HUSSIO | Official Store Information",
+    title: "Liên hệ HUSSIO | Thông tin cửa hàng chính thức",
     description:
-      "Contact HUSSIO through our official address, Facebook, Shopee, and TikTok. Build trust with verified business information.",
+      "Liên hệ HUSSIO qua địa chỉ, Facebook, Shopee và TikTok chính thức để tăng độ tin cậy và hỗ trợ nhanh chóng.",
   },
   login: {
-    title: "Login | HUSSIO",
-    description: "Sign in to your HUSSIO account to manage your profile and shopping activity.",
+    title: "Đăng nhập | HUSSIO",
+    description: "Đăng nhập tài khoản HUSSIO để quản lý thông tin và hoạt động mua sắm.",
   },
   register: {
-    title: "Register | HUSSIO",
-    description: "Create a HUSSIO account for faster checkout and order updates.",
+    title: "Đăng ký | HUSSIO",
+    description: "Tạo tài khoản HUSSIO để mua sắm nhanh hơn và theo dõi đơn hàng.",
   },
 } as const;
