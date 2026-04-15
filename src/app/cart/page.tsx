@@ -2,18 +2,14 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { products } from '@/mock/products';
 import CartItem from '@/components/cart/CartItem';
 import CartSummary from '@/components/cart/CartSummary';
+import { useCart } from '@/hooks/useCart';
 
 const CartPage = () => {
-  const cartItems = products.slice(0, 2).map((p, index) => ({
-    ...p,
-    quantity: index + 1,
-    size: 'M'
-  }));
-
-  const subtotal = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+  const { cart, loading, remove, updateQty } = useCart();
+  const cartItems = cart?.lines || [];
+  const subtotal = cart?.subtotalAmount || 0;
 
   return (
     <div className="bg-white min-h-screen">
@@ -25,7 +21,9 @@ const CartPage = () => {
             <span className="text-black uppercase">GIỎ HÀNG</span>
         </div>
 
-        {cartItems.length > 0 ? (
+        {loading ? (
+          <div className="py-20 text-center text-sm text-zinc-500">Đang tải giỏ hàng...</div>
+        ) : cartItems.length > 0 ? (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             <div className="lg:col-span-8 space-y-6">
               <div className="hidden md:grid grid-cols-12 gap-4 pb-4 border-b border-zinc-200 text-[10px] font-semibold tracking-[0.2em] text-zinc-500">
@@ -36,11 +34,21 @@ const CartPage = () => {
               </div>
 
               {cartItems.map((item) => (
-                <CartItem key={item.id} item={item} />
+                <CartItem key={item.id} item={item} onRemove={remove} onUpdateQty={updateQty} />
               ))}
             </div>
 
             <CartSummary subtotal={subtotal} />
+            {cart?.checkoutUrl && (
+              <div className="lg:col-span-12">
+                <a
+                  href={cart.checkoutUrl}
+                  className="block w-full bg-black text-white py-4 text-center text-[10px] font-semibold tracking-[0.18em] uppercase hover:bg-zinc-800 transition-all"
+                >
+                  THANH TOÁN (SHOPIFY)
+                </a>
+              </div>
+            )}
           </div>
         ) : (
           <div className="max-w-md mx-auto text-center py-20">

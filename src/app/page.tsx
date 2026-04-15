@@ -4,17 +4,18 @@ import CategoryGrid from '@/sections/home/CategoryGrid';
 import CollectionBanners from '@/sections/home/CollectionBanners';
 import ProductSection from '@/sections/home/ProductSection';
 import BannerSection from '@/sections/home/BannerSection';
-import { products } from '@/mock/products';
 import TrustBadge from '@/components/common/TrustBadge';
 import BusinessCta from '@/components/common/BusinessCta';
 import { seoConfig, siteConfig } from '@/config/site';
+import { getProducts } from '@/lib/shopify';
 
 export const metadata: Metadata = {
   title: seoConfig.home.title,
   description: seoConfig.home.description,
 };
 
-export default function Home() {
+export default async function Home() {
+  const products = await getProducts(20);
   const bestSellers = products.slice(0, 4);
   const newArrivals = products.slice(0, 8);
 
@@ -27,7 +28,7 @@ export default function Home() {
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-500">Thương hiệu chính thức</p>
             <h1 className="mt-2 text-2xl font-black uppercase tracking-tight md:text-4xl">
-              {siteConfig.brandName} Men's Office Wear
+              {siteConfig.brandName} Men&apos;s Office Wear
             </h1>
           </div>
           <BusinessCta />

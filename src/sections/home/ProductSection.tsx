@@ -1,11 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
 import ProductGrid from '@/components/product/ProductGrid';
-import { Product } from '@/mock/products';
+import type { StoreProduct } from '@/types/product';
 
 interface ProductSectionProps {
   title: string;
-  products: Product[];
+  products: StoreProduct[];
 }
 
 const ProductSection = ({ title, products }: ProductSectionProps) => {

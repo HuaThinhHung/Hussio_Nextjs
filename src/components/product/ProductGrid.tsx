@@ -1,9 +1,9 @@
 import React from 'react';
 import ProductCard from './ProductCard';
-import { Product } from '@/mock/products';
+import type { StoreProduct } from '@/types/product';
 
 interface ProductGridProps {
-  products: Product[];
+  products: StoreProduct[];
   columns?: 2 | 3 | 4;
 }
 
