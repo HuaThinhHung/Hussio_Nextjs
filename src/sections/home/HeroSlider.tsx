@@ -135,7 +135,7 @@ const HeroSlider = () => {
                 // eslint-disable-next-line react/no-array-index-key
                 key={i}
                 href={s.href}
-                className="relative h-[55vh] min-h-[320px] max-h-[720px] min-w-full snap-start overflow-hidden bg-black md:h-[78vh] md:max-h-[860px]"
+                className="relative h-[45vh] min-h-[300px] max-h-[800px] min-w-full snap-start overflow-hidden md:h-[85vh] lg:h-[90vh]"
                 draggable={false}
               >
                 <Image
@@ -144,9 +144,8 @@ const HeroSlider = () => {
                   fill
                   priority={i === 0}
                   sizes="100vw"
-                  className="object-contain"
+                  className="object-cover object-center"
                 />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-black/5 to-transparent" />
               </Link>
             );
           })}

@@ -49,40 +49,38 @@ export default async function Home() {
             Feedback khách hàng
           </h2>
         </div>
-        <div className="relative overflow-hidden border border-zinc-200 bg-white">
-          <div className="flex gap-2 md:gap-3 py-2 md:py-3 animate-marquee [animation-duration:55s] hover:[animation-play-state:paused]">
-            {[...Array(12)].map((_, idx) => {
-              const i = idx + 1;
-              return (
+        <div className="relative overflow-hidden border-y border-zinc-200 bg-white py-4 md:py-6">
+          <div className="flex w-fit gap-4 md:gap-6 animate-marquee hover:[animation-play-state:paused]">
+            <div className="flex gap-4 md:gap-6 px-2">
+              {[...Array(12)].map((_, idx) => (
                 <div
-                  key={`fb-a-${i}`}
-                  className="h-[130px] w-[200px] md:h-[160px] md:w-[250px] lg:h-[190px] lg:w-[300px] shrink-0 bg-zinc-100 overflow-hidden transition-all duration-500"
+                  key={`fb-a-${idx}`}
+                  className="h-[140px] w-[220px] md:h-[180px] md:w-[280px] lg:h-[220px] lg:w-[340px] shrink-0 bg-zinc-50 overflow-hidden rounded-sm transition-all duration-500 shadow-sm border border-zinc-100"
                 >
                   <img
-                    src={`/images/feeback/${i}.jpg`}
-                    alt={`feedback ${i}`}
-                    className="h-full w-full object-cover brightness-[1.06] contrast-[1.04] transition-transform duration-700 hover:scale-[1.03]"
+                    src={`/images/feeback/${idx + 1}.jpg`}
+                    alt={`feedback ${idx + 1}`}
+                    className="h-full w-full object-cover brightness-[1.02] contrast-[1.02] transition-transform duration-700 hover:scale-[1.05]"
                     loading="lazy"
                   />
                 </div>
-              );
-            })}
-            {[...Array(12)].map((_, idx) => {
-              const i = idx + 1;
-              return (
+              ))}
+            </div>
+            <div className="flex gap-4 md:gap-6 px-2">
+              {[...Array(12)].map((_, idx) => (
                 <div
-                  key={`fb-b-${i}`}
-                  className="h-[130px] w-[200px] md:h-[160px] md:w-[250px] lg:h-[190px] lg:w-[300px] shrink-0 bg-zinc-100 overflow-hidden transition-all duration-500"
+                  key={`fb-b-${idx}`}
+                  className="h-[140px] w-[220px] md:h-[180px] md:w-[280px] lg:h-[220px] lg:w-[340px] shrink-0 bg-zinc-50 overflow-hidden rounded-sm transition-all duration-500 shadow-sm border border-zinc-100"
                 >
                   <img
-                    src={`/images/feeback/${i}.jpg`}
-                    alt={`feedback ${i}`}
-                    className="h-full w-full object-cover brightness-[1.06] contrast-[1.04] transition-transform duration-700 hover:scale-[1.03]"
+                    src={`/images/feeback/${idx + 1}.jpg`}
+                    alt={`feedback ${idx + 1}`}
+                    className="h-full w-full object-cover brightness-[1.02] contrast-[1.02] transition-transform duration-700 hover:scale-[1.05]"
                     loading="lazy"
                   />
                 </div>
-              );
-            })}
+              ))}
+            </div>
           </div>
         </div>
       </section>

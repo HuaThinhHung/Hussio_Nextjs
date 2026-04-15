@@ -8,18 +8,18 @@
   --color-line: #e8e8e8;
 
   /* Fonts */
-  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-roboto), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-mono), ui-monospaced, monospace;
 
   /* Animations */
-  --keyword-marquee: marquee 40s linear infinite;
-  --keyword-fade-in: fadeIn 0.8s ease-out forwards;
-  --keyword-slide-right: slideRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  --keyword-pulse-subtle: pulse-subtle 2s ease-in-out infinite;
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-fade-in: fadeIn 0.8s ease-out forwards;
+  --animate-slide-right: slideRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-pulse-subtle: pulse-subtle 2s ease-in-out infinite;
 
   @keyframes marquee {
-    0% { transform: translateX(100%); }
-    100% { transform: translateX(-100%); }
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
   }
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
@@ -58,19 +58,4 @@
   }
 }
 
-/* Custom Utilities */
-@utility animate-marquee {
-  animation: var(--keyword-marquee);
-}
-
-@utility animate-fade-in {
-  animation: var(--keyword-fade-in);
-}
-
-@utility animate-slide-right {
-  animation: var(--keyword-slide-right);
-}
-
-@utility animate-pulse-subtle {
-  animation: var(--keyword-pulse-subtle);
-}
+/* Custom Utilities now handled by @theme */
