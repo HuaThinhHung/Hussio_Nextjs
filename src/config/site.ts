@@ -14,8 +14,12 @@ export const siteConfig = {
   },
   social: {
     facebook: "https://www.facebook.com/HUSSIO.vn",
+    instagram: "https://www.instagram.com/hussio.official",
     shopee: "https://shopee.vn/hussio",
     tiktok: "https://www.tiktok.com/@hussio.official",
+    zalo: "https://zalo.me/yourid",
+    threads: "https://www.threads.net/@hussio.official",
+    youtube: "https://www.youtube.com/@hussio.official",
   },
   navigation: [
     { name: "NEW-IN", href: "/new-in" },

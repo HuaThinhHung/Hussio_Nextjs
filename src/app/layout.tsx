@@ -32,13 +32,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi" className={`${beVietnamPro.variable} ${geistMono.variable} antialiased`}>
+    <html
+      lang="vi"
+      className={`${beVietnamPro.variable} ${geistMono.variable} antialiased`}
+    >
       <body className="min-h-screen bg-white text-black selection:bg-black selection:text-white">
         <AnnouncementBar />
         <Header />
-        <main className="flex-grow">
-          {children}
-        </main>
+        <main className="grow">{children}</main>
         <Footer />
         <BackToTopButton />
       </body>
