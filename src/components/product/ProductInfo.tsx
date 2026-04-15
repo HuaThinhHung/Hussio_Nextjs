@@ -9,6 +9,7 @@ import { useCart } from '@/hooks/useCart';
 interface ProductInfoProps {
   title: string;
   variants?: StoreProductVariant[];
+  options?: Array<{ name: string; values: string[] }>;
   warranty?: string;
 }
 
@@ -16,52 +17,27 @@ function formatVnd(price: number) {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
 }
 
-function normalizeName(s: string) {
-  return s.toLowerCase().trim();
-}
-
-function matchesOptionName(actual: string, aliases: string[]) {
-  const a = normalizeName(actual);
-  return aliases.some((x) => a === normalizeName(x));
-}
-
-const COLOR_ALIASES = ['color', 'màu', 'mau'];
-const SIZE_ALIASES = ['size', 'kích thước', 'kich thuoc', 'size áo', 'size quan'];
-
-function getOptionValues(variants: StoreProductVariant[], aliases: string[]) {
-  const values = new Set<string>();
-  for (const v of variants) {
-    const hit = v.selectedOptions.find((o) => matchesOptionName(o.name, aliases));
-    if (hit?.value) values.add(hit.value);
-  }
-  return Array.from(values);
-}
-
-function findVariant(variants: StoreProductVariant[], color?: string, size?: string) {
-  return (
-    variants.find((v) => {
-      const colorHit = color
-        ? v.selectedOptions.some((o) => matchesOptionName(o.name, COLOR_ALIASES) && o.value === color)
-        : true;
-      const sizeHit = size
-        ? v.selectedOptions.some((o) => matchesOptionName(o.name, SIZE_ALIASES) && o.value === size)
-        : true;
-      return colorHit && sizeHit;
-    }) || variants[0]
-  );
-}
-
-const ProductInfo = ({ title, variants = [], warranty }: ProductInfoProps) => {
+const ProductInfo = ({ title, variants = [], options = [], warranty }: ProductInfoProps) => {
   const router = useRouter();
   const { add, loading: cartLoading } = useCart();
-  const colors = getOptionValues(variants, COLOR_ALIASES);
-  const sizes = getOptionValues(variants, SIZE_ALIASES);
 
-  const [selectedColor, setSelectedColor] = useState<string | undefined>(colors[0]);
-  const [selectedSize, setSelectedSize] = useState<string | undefined>(sizes[0]);
+  // Khởi tạo state cho các option đã chọn
+  // Mặc định chọn giá trị đầu tiên của mỗi option
+  const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>(() => {
+    const initial: Record<string, string> = {};
+    options.forEach(opt => {
+      if (opt.values.length > 0) initial[opt.name] = opt.values[0];
+    });
+    return initial;
+  });
+
   const [quantity, setQuantity] = useState(1);
 
-  const selectedVariant = findVariant(variants, selectedColor, selectedSize);
+  // Tìm variant khớp với tất cả option đã chọn
+  const selectedVariant = variants.find(v => 
+    v.selectedOptions.every(opt => selectedOptions[opt.name] === opt.value)
+  ) || variants[0];
+
   const price = selectedVariant?.price ?? 0;
   const originalPrice =
     selectedVariant?.compareAtPrice && selectedVariant.compareAtPrice > price
@@ -72,14 +48,18 @@ const ProductInfo = ({ title, variants = [], warranty }: ProductInfoProps) => {
   const warrantyText = warranty || 'Bảo hành 1 đổi 1 theo chính sách cửa hàng';
   const canAdd = availability && Boolean(selectedVariant?.id) && !cartLoading;
 
+  const handleOptionChange = (name: string, value: string) => {
+    setSelectedOptions(prev => ({ ...prev, [name]: value }));
+  };
+
   return (
-    <div className="lg:col-span-5 space-y-8">
-      <div className="space-y-2">
+    <div className="space-y-8">
+      <div className="space-y-3">
         <h1 className="text-2xl md:text-3xl font-black tracking-tight uppercase leading-tight">
           {title}
         </h1>
-        <div className="flex items-center space-x-3">
-          <span className="text-xl font-black text-black">
+        <div className="flex items-center space-x-4">
+          <span className="text-2xl font-black text-black">
             {formatVnd(price)}
           </span>
           {originalPrice && (
@@ -88,89 +68,77 @@ const ProductInfo = ({ title, variants = [], warranty }: ProductInfoProps) => {
             </span>
           )}
         </div>
-        <div className="flex items-center gap-3 text-[10px] font-semibold tracking-widest uppercase text-zinc-500">
-          <span className={availability ? 'text-emerald-600' : 'text-red-600'}>
+        <div className="flex flex-wrap items-center gap-3 text-[10px] font-bold tracking-widest uppercase">
+          <span className={availability ? 'text-emerald-600 bg-emerald-50 px-2 py-1' : 'text-red-600 bg-red-50 px-2 py-1'}>
             {availability ? 'CÒN HÀNG' : 'HẾT HÀNG'}
           </span>
-          <span className="text-zinc-300">|</span>
-          <span>{warrantyText}</span>
+          {selectedVariant?.sku && (
+            <span className="text-zinc-500 bg-zinc-100 px-2 py-1">SKU: {selectedVariant.sku}</span>
+          )}
         </div>
       </div>
 
-      {colors.length > 0 && (
-        <div className="space-y-4 pt-4 border-t border-zinc-200">
-          <div className="flex justify-between items-center text-[10px] font-semibold tracking-widest uppercase">
-            <span>MÀU: {selectedColor}</span>
+      <div className="space-y-6 pt-6 border-t border-zinc-100">
+        {options.map((opt) => (
+          <div key={opt.name} className="space-y-4">
+            <div className="flex justify-between items-center text-[10px] font-bold tracking-widest uppercase">
+              <span>{opt.name}: {selectedOptions[opt.name]}</span>
+              {opt.name.toLowerCase().includes('size') && (
+                <span className="underline cursor-pointer opacity-60 hover:opacity-100 transition-opacity">Bảng size</span>
+              )}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {opt.values.map((val) => {
+                const isActive = selectedOptions[opt.name] === val;
+                return (
+                  <button
+                    key={val}
+                    onClick={() => handleOptionChange(opt.name, val)}
+                    className={cn(
+                      'min-w-[44px] h-11 px-4 border text-[11px] font-bold tracking-widest uppercase transition-all duration-200',
+                      isActive 
+                        ? 'bg-black text-white border-black shadow-md' 
+                        : 'bg-white text-black border-zinc-200 hover:border-black'
+                    )}
+                  >
+                    {val}
+                  </button>
+                );
+              })}
+            </div>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {colors.map((c) => (
-              <button
-                key={c}
-                onClick={() => setSelectedColor(c)}
-                className={cn(
-                  'h-11 px-4 border text-[10px] font-semibold tracking-widest uppercase transition-all duration-300',
-                  selectedColor === c ? 'bg-black text-white border-black' : 'bg-white text-black border-zinc-200 hover:border-black'
-                )}
-              >
-                {c}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
+        ))}
 
-      {sizes.length > 0 && (
-        <div className="space-y-4 pt-2">
-          <div className="flex justify-between items-center text-[10px] font-semibold tracking-widest uppercase">
-            <span>KÍCH THƯỚC: {selectedSize}</span>
-            <span className="underline cursor-pointer opacity-60">Bảng size</span>
+        <div className="space-y-4">
+          <div className="text-[10px] font-bold tracking-widest uppercase">SỐ LƯỢNG</div>
+          <div className="flex items-center w-32 border border-zinc-200 bg-zinc-50/50">
+            <button 
+              className="w-10 h-10 flex items-center justify-center hover:bg-white transition-colors border-r border-zinc-200"
+              onClick={() => setQuantity(Math.max(1, quantity - 1))}
+            >
+              -
+            </button>
+            <input 
+              type="text" 
+              value={quantity} 
+              readOnly
+              className="w-12 text-center text-xs font-bold bg-transparent focus:outline-none"
+            />
+            <button 
+              className="w-10 h-10 flex items-center justify-center hover:bg-white transition-colors border-l border-zinc-200"
+              onClick={() => setQuantity(quantity + 1)}
+            >
+              +
+            </button>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {sizes.map((s) => (
-              <button
-                key={s}
-                onClick={() => setSelectedSize(s)}
-                className={cn(
-                  'w-12 h-12 flex items-center justify-center border text-xs font-semibold transition-all duration-300',
-                  selectedSize === s ? 'bg-black text-white border-black' : 'bg-white text-black border-zinc-200 hover:border-black'
-                )}
-              >
-                {s}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      <div className="space-y-4 pt-4">
-        <div className="text-[10px] font-semibold tracking-widest uppercase">SỐ LƯỢNG</div>
-        <div className="flex items-center w-32 border border-zinc-200">
-          <button 
-            className="w-10 h-10 flex items-center justify-center hover:bg-zinc-50"
-            onClick={() => setQuantity(Math.max(1, quantity - 1))}
-          >
-            -
-          </button>
-          <input 
-            type="text" 
-            value={quantity} 
-            readOnly
-            className="w-12 text-center text-xs font-bold focus:outline-none"
-          />
-          <button 
-            className="w-10 h-10 flex items-center justify-center hover:bg-zinc-50"
-            onClick={() => setQuantity(quantity + 1)}
-          >
-            +
-          </button>
         </div>
       </div>
 
-      <div className="flex flex-col space-y-3 pt-6">
+      <div className="flex flex-col space-y-3 pt-4">
         <button
           disabled={!canAdd}
           className={cn(
-            'w-full py-4 text-xs font-semibold tracking-[0.18em] uppercase transition-all',
+            'w-full py-5 text-[11px] font-bold tracking-[0.2em] uppercase transition-all duration-300',
             canAdd ? 'bg-black text-white hover:bg-zinc-800' : 'bg-zinc-200 text-zinc-500 cursor-not-allowed'
           )}
           onClick={async () => {
@@ -179,27 +147,38 @@ const ProductInfo = ({ title, variants = [], warranty }: ProductInfoProps) => {
             router.push('/cart');
           }}
         >
-          {cartLoading ? 'ĐANG THÊM...' : 'THÊM VÀO GIỎ HÀNG'}
+          {cartLoading ? 'ĐANG XỬ LÝ...' : 'THÊM VÀO GIỎ HÀNG'}
         </button>
         <button
           disabled={!canAdd}
           className={cn(
-            'w-full border py-4 text-xs font-semibold tracking-[0.18em] uppercase transition-all',
-            canAdd ? 'border-black text-black hover:bg-zinc-50' : 'border-zinc-200 text-zinc-500 cursor-not-allowed'
+            'w-full border py-5 text-[11px] font-bold tracking-[0.2em] uppercase transition-all duration-300',
+            canAdd ? 'border-black text-black hover:bg-zinc-900 hover:text-white' : 'border-zinc-200 text-zinc-400 cursor-not-allowed'
           )}
           onClick={async () => {
             if (!selectedVariant?.id) return;
             const c = await add(selectedVariant.id, quantity);
-            window.location.href = c.checkoutUrl;
+            if (c.checkoutUrl) window.location.href = c.checkoutUrl;
           }}
         >
           MUA NGAY
         </button>
-        {selectedVariant?.id && (
-          <div className="text-[10px] text-zinc-400 tracking-widest uppercase">
-            Mã variant: {selectedVariant.id.split('/').pop()}
-          </div>
-        )}
+        
+        <div className="flex items-center justify-center gap-2 pt-2 grayscale opacity-50">
+           <img src="https://cdn.shopify.com/s/files/1/0611/8195/2240/files/payment-methods.png?v=1641542562" alt="payment" className="h-6 object-contain" />
+        </div>
+      </div>
+
+      <div className="pt-6 border-t border-zinc-100">
+        <div className="bg-zinc-50 p-4 space-y-2">
+           <div className="flex items-start gap-3">
+              <span className="text-lg">🛡️</span>
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-black">Cam kết từ Hussio</p>
+                <p className="text-[10px] text-zinc-500 uppercase leading-relaxed mt-1">{warrantyText}</p>
+              </div>
+           </div>
+        </div>
       </div>
     </div>
   );

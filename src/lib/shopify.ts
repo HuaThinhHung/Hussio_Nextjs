@@ -49,13 +49,28 @@ async function shopifyFetch<T>(query: string, variables?: Record<string, unknown
     throw new Error(`Shopify fetch failed (${res.status}). ${text}`);
   }
 
-  const json = (await res.json()) as { data?: T; errors?: unknown };
+  const json = (await res.json()) as { data?: T; errors?: Array<{ message: string }> };
+  
   if (json.errors) {
-    throw new Error(`Shopify GraphQL error: ${JSON.stringify(json.errors)}`);
+    const errorMsg = json.errors.map(e => e.message).join(', ');
+    console.error(`[Shopify Error] GraphQL Errors: ${errorMsg}`);
+    throw new Error(`Shopify GraphQL error: ${errorMsg}`);
   }
+
   if (!json.data) {
+    console.error('[Shopify Error] No data returned from GraphQL.');
     throw new Error('Shopify GraphQL returned no data.');
   }
+
+  // Diagnostic logging for empty product/collection results
+  const dataObj = json.data as any;
+  if (dataObj.products && (!dataObj.products.edges || dataObj.products.edges.length === 0)) {
+    console.warn('[Shopify Warning] Products query returned 200 OK but 0 products. Check if products are PUBLISHED to the Storefront sales channel.');
+  }
+  if (dataObj.productByHandle === null && variables?.handle) {
+    console.warn(`[Shopify Warning] productByHandle returned null for handle "${variables.handle}". Check if the handle is correct and published.`);
+  }
+
   return json.data;
 }
 
@@ -67,7 +82,7 @@ function toNumber(amount: string | null | undefined): number | undefined {
 
 type ShopifyImageEdge = { node: { url: string | null; altText?: string | null } | null } | null;
 type ShopifyVariantEdge = {
-  node: { selectedOptions: Array<{ name: string; value: string }> } | null;
+  node: { availableForSale?: boolean; selectedOptions: Array<{ name: string; value: string }> } | null;
 } | null;
 
 type ShopifyProductNode = {
@@ -76,10 +91,12 @@ type ShopifyProductNode = {
   title: string;
   vendor?: string | null;
   productType?: string | null;
+  tags?: string[] | null;
+  availableForSale?: boolean | null;
   featuredImage?: { url: string | null; altText?: string | null } | null;
   images?: { edges: ShopifyImageEdge[] } | null;
   priceRange?: { minVariantPrice?: { amount?: string | null } | null } | null;
-  compareAtPriceRange?: { maxVariantPrice?: { amount?: string | null } | null } | null;
+  compareAtPriceRange?: { minVariantPrice?: { amount?: string | null } | null } | null;
   variants?: { edges: ShopifyVariantEdge[] } | null;
 };
 
@@ -90,17 +107,26 @@ function mapProduct(node: ShopifyProductNode): StoreProduct {
       .filter((u): u is string => Boolean(u)) ?? [];
 
   const price = toNumber(node.priceRange?.minVariantPrice?.amount ?? undefined) ?? 0;
-  const compareAtPrice = toNumber(node.compareAtPriceRange?.maxVariantPrice?.amount ?? undefined);
+  // Dùng minVariantPrice để nhất quán với price
+  const compareAtPrice = toNumber(node.compareAtPriceRange?.minVariantPrice?.amount ?? undefined);
 
-  const firstVariant = node.variants?.edges?.[0]?.node || null;
-  const selectedOptions: Array<{ name: string; value: string }> = firstVariant?.selectedOptions ?? [];
-  const colors = selectedOptions
-    .filter((o) => {
-      const n = typeof o?.name === 'string' ? o.name.toLowerCase().trim() : '';
-      return n === 'color' || n === 'màu' || n === 'mau';
-    })
-    .map((o) => o.value)
-    .filter(Boolean);
+  // Gom màu unique từ TẤT CẢ variants (không chỉ variant đầu tiên)
+  const allVariantOptions = (node.variants?.edges || [])
+    .flatMap((e) => e?.node?.selectedOptions ?? []);
+  const COLOR_KEYS = new Set(['color', 'màu', 'mau', 'colour']);
+  const colors = [
+    ...new Set(
+      allVariantOptions
+        .filter((o) => COLOR_KEYS.has((o?.name ?? '').toLowerCase().trim()))
+        .map((o) => o.value)
+        .filter(Boolean)
+    ),
+  ];
+
+  // availableForSale: true nếu ít nhất 1 variant còn hàng
+  const availableForSale =
+    node.availableForSale ??
+    (node.variants?.edges || []).some((e) => e?.node?.availableForSale === true);
 
   return {
     id: node.id,
@@ -108,6 +134,8 @@ function mapProduct(node: ShopifyProductNode): StoreProduct {
     title: node.title,
     productType: node.productType ?? undefined,
     vendor: node.vendor ?? undefined,
+    tags: node.tags?.filter(Boolean) ?? [],
+    availableForSale,
     price,
     compareAtPrice,
     image: node.featuredImage?.url || images[0],
@@ -123,6 +151,8 @@ const PRODUCT_CARD_FRAGMENT = /* GraphQL */ `
     title
     vendor
     productType
+    tags
+    availableForSale
     featuredImage {
       url
       altText
@@ -142,14 +172,15 @@ const PRODUCT_CARD_FRAGMENT = /* GraphQL */ `
       }
     }
     compareAtPriceRange {
-      maxVariantPrice {
+      minVariantPrice {
         amount
         currencyCode
       }
     }
-    variants(first: 1) {
+    variants(first: 100) {
       edges {
         node {
+          availableForSale
           selectedOptions {
             name
             value
@@ -198,6 +229,7 @@ export async function getProductByHandle(handle: string): Promise<StoreProduct |
 type ShopifyVariantNodeFull = {
   id: string;
   title: string;
+  sku?: string | null;
   availableForSale: boolean;
   price?: { amount?: string | null } | null;
   compareAtPrice?: { amount?: string | null } | null;
@@ -210,6 +242,7 @@ type ShopifyProductDetailNode = {
   title: string;
   vendor?: string | null;
   productType?: string | null;
+  description?: string | null;
   descriptionHtml?: string | null;
   images?: { edges: ShopifyImageEdge[] } | null;
   options?: Array<{ name: string; values: string[] }> | null;
@@ -223,6 +256,7 @@ function mapVariant(v: ShopifyVariantNodeFull): StoreProductVariant {
   return {
     id: v.id,
     title: v.title,
+    sku: v.sku || undefined,
     availableForSale: Boolean(v.availableForSale),
     price,
     compareAtPrice,
@@ -239,6 +273,7 @@ export async function getProductDetailByHandle(handle: string): Promise<StorePro
         title
         vendor
         productType
+        description
         descriptionHtml
         images(first: 20) {
           edges {
@@ -257,6 +292,7 @@ export async function getProductDetailByHandle(handle: string): Promise<StorePro
             node {
               id
               title
+              sku
               availableForSale
               price {
                 amount
@@ -300,6 +336,7 @@ export async function getProductDetailByHandle(handle: string): Promise<StorePro
     title: p.title,
     vendor: p.vendor ?? undefined,
     productType: p.productType ?? undefined,
+    description: p.description ?? undefined,
     descriptionHtml: p.descriptionHtml ?? undefined,
     images,
     options: (p.options || []).map((o) => ({ name: o.name, values: o.values })),
@@ -345,7 +382,7 @@ function mapCart(cart: ShopifyCart): StoreCart {
     currencyCode,
     lines: (cart.lines.edges || [])
       .map((e) => e?.node)
-      .filter(Boolean)
+      .filter((node): node is NonNullable<typeof node> => Boolean(node))
       .map((line) => {
         const v = line.merchandise;
         return {

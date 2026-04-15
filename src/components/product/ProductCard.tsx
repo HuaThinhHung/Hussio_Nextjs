@@ -27,6 +27,20 @@ const ProductCard = ({ product }: ProductCardProps) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <Link href={`/products/${product.handle}`} className="block relative aspect-3/4 overflow-hidden bg-zinc-100 border border-zinc-200">
+        {/* Badges */}
+        <div className="absolute top-3 left-3 z-10 flex flex-col gap-2">
+          {product.availableForSale === false && (
+            <span className="bg-white/90 backdrop-blur-sm text-black text-[9px] font-bold px-2 py-1 tracking-widest uppercase shadow-sm">
+              HẾT HÀNG
+            </span>
+          )}
+          {product.compareAtPrice !== undefined && product.compareAtPrice > product.price && (
+            <span className="bg-black text-white text-[9px] font-bold px-2 py-1 tracking-widest uppercase">
+              SALE
+            </span>
+          )}
+        </div>
+
         {/* Product Images */}
         <div className="relative w-full h-full">
           <img 
@@ -48,14 +62,16 @@ const ProductCard = ({ product }: ProductCardProps) => {
         </div>
 
         {/* Quick Add Button */}
-        <button className="absolute bottom-3 right-3 p-2 bg-white border border-zinc-200 backdrop-blur-sm rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <svg className="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-          </svg>
-        </button>
+        {product.availableForSale !== false && (
+          <button className="absolute bottom-3 right-3 p-2 bg-white border border-zinc-200 backdrop-blur-sm rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-black hover:text-white transition-colors">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            </svg>
+          </button>
+        )}
       </Link>
 
-      <div className="mt-4 space-y-1.5">
+      <div className={cn("mt-4 space-y-1.5", product.availableForSale === false && "opacity-60")}>
         <Link href={`/products/${product.handle}`} className="text-[11px] font-semibold tracking-tight text-zinc-800 hover:text-black transition-colors line-clamp-1 uppercase">
           {product.title}
         </Link>
@@ -64,7 +80,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           <span className="text-[12px] font-black text-black">
             {formatPrice(product.price)}
           </span>
-          {product.compareAtPrice && product.compareAtPrice > product.price && (
+          {product.compareAtPrice !== undefined && product.compareAtPrice > product.price && (
             <span className="text-[10px] text-zinc-400 line-through">
               {formatPrice(product.compareAtPrice)}
             </span>

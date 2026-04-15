@@ -5,6 +5,7 @@ import Link from 'next/link';
 
 interface CartSummaryProps {
   subtotal: number;
+  checkoutUrl?: string;
 }
 
 const CartSummary = ({ subtotal }: CartSummaryProps) => {
@@ -33,7 +34,13 @@ const CartSummary = ({ subtotal }: CartSummaryProps) => {
           <span className="text-lg font-black text-black">{formatPrice(subtotal)}</span>
         </div>
 
-        <button className="w-full bg-black text-white py-4 text-[10px] font-semibold tracking-[0.18em] uppercase hover:bg-zinc-800 transition-all">
+        <button 
+          onClick={() => {
+            if (checkoutUrl) window.location.href = checkoutUrl;
+          }}
+          disabled={!checkoutUrl}
+          className="w-full bg-black text-white py-4 text-[10px] font-semibold tracking-[0.18em] uppercase hover:bg-zinc-800 transition-all disabled:bg-zinc-300 disabled:cursor-not-allowed"
+        >
           TIẾN HÀNH THANH TOÁN
         </button>
         

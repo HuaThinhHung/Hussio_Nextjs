@@ -6,6 +6,8 @@ export interface StoreProduct {
   title: string;
   productType?: string;
   vendor?: string;
+  tags: string[];
+  availableForSale: boolean;
   price: MoneyAmount;
   compareAtPrice?: MoneyAmount;
   image?: string;

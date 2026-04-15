@@ -38,17 +38,7 @@ const CartPage = () => {
               ))}
             </div>
 
-            <CartSummary subtotal={subtotal} />
-            {cart?.checkoutUrl && (
-              <div className="lg:col-span-12">
-                <a
-                  href={cart.checkoutUrl}
-                  className="block w-full bg-black text-white py-4 text-center text-[10px] font-semibold tracking-[0.18em] uppercase hover:bg-zinc-800 transition-all"
-                >
-                  THANH TOÁN (SHOPIFY)
-                </a>
-              </div>
-            )}
+            <CartSummary subtotal={subtotal} checkoutUrl={cart?.checkoutUrl} />
           </div>
         ) : (
           <div className="max-w-md mx-auto text-center py-20">

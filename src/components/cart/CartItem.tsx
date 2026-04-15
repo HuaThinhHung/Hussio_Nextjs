@@ -5,8 +5,8 @@ import type { StoreCartLine } from '@/types/cart';
 
 interface CartItemProps {
   item: StoreCartLine;
-  onRemove: (lineId: string) => void | Promise<void>;
-  onUpdateQty: (lineId: string, quantity: number) => void | Promise<void>;
+  onRemove: (lineId: string) => Promise<any> | void;
+  onUpdateQty: (lineId: string, quantity: number) => Promise<any> | void;
 }
 
 const CartItem = ({ item, onRemove, onUpdateQty }: CartItemProps) => {

@@ -11,9 +11,10 @@ type ParamsLike = { handle?: string } | Promise<{ handle?: string }>;
 
 export default async function ProductDetailPage({ params }: { params: ParamsLike }) {
   const resolved = await params;
-  const handle = resolved?.handle;
+  const rawHandle = resolved?.handle || '';
+  const handle = decodeURIComponent(rawHandle);
 
-  if (typeof handle !== 'string' || handle.trim().length === 0) {
+  if (!handle || handle.trim().length === 0) {
     return (
       <div className="bg-white min-h-screen">
         <div className="container mx-auto px-4 py-10 md:py-20">
@@ -26,17 +27,7 @@ export default async function ProductDetailPage({ params }: { params: ParamsLike
   const detail = await getProductDetailByHandle(handle);
   const products = await getProducts(30);
 
-  const fallback = products[0] || null;
-  const p = detail
-    ? {
-        id: detail.id,
-        title: detail.title,
-        images: detail.images,
-        price: detail.variants[0]?.price ?? 0,
-        compareAtPrice: detail.variants[0]?.compareAtPrice,
-      }
-    : fallback;
-  if (!p) {
+  if (!detail) {
     return (
       <div className="bg-white min-h-screen">
         <div className="container mx-auto px-4 py-10 md:py-20">
@@ -46,31 +37,25 @@ export default async function ProductDetailPage({ params }: { params: ParamsLike
     );
   }
 
-  const relatedProducts = products.filter((x) => x.id !== p.id).slice(0, 4);
-  const galleryImages = detail?.images?.length ? detail.images : [fallback?.image, fallback?.hoverImage].filter(Boolean) as string[];
-  const mainImg = galleryImages[0] || '/images/tee.webp';
-  const hoverImg = galleryImages[1] || mainImg;
-  const title = detail?.title || fallback?.title || 'SẢN PHẨM';
+  const relatedProducts = products.filter((x) => x.id !== detail.id).slice(0, 4);
 
   return (
     <div className="bg-white min-h-screen">
       <div className="container mx-auto px-4 py-10 md:py-20 animate-fade-in">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           <ProductGallery 
-            images={{
-              main: mainImg,
-              hover: hoverImg,
-            }} 
-            title={title} 
+            images={detail.images} 
+            title={detail.title} 
           />
 
           <div className="lg:col-span-5 space-y-8">
             <ProductInfo 
-              title={title} 
-              variants={detail?.variants || []}
-              warranty={detail?.warranty}
+              title={detail.title} 
+              variants={detail.variants}
+              options={detail.options}
+              warranty={detail.warranty}
             />
-            <ProductAccordions descriptionHtml={detail?.descriptionHtml} warranty={detail?.warranty} />
+            <ProductAccordions descriptionHtml={detail.descriptionHtml} warranty={detail.warranty} />
           </div>
         </div>
         <div className="mt-12">

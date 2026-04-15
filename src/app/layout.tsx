@@ -6,6 +6,7 @@ import Footer from "@/components/layout/Footer";
 import AnnouncementBar from "@/components/layout/AnnouncementBar";
 import BackToTopButton from "@/components/common/BackToTopButton";
 import { seoConfig, siteConfig } from "@/config/site";
+import { CartProvider } from "@/context/CartContext";
 
 const beVietnamPro = Be_Vietnam_Pro({
   variable: "--font-sans",
@@ -37,11 +38,13 @@ export default function RootLayout({
       className={`${beVietnamPro.variable} ${geistMono.variable} antialiased`}
     >
       <body className="min-h-screen bg-white text-black selection:bg-black selection:text-white">
-        <AnnouncementBar />
-        <Header />
-        <main className="grow">{children}</main>
-        <Footer />
-        <BackToTopButton />
+        <CartProvider>
+          <AnnouncementBar />
+          <Header />
+          <main className="grow">{children}</main>
+          <Footer />
+          <BackToTopButton />
+        </CartProvider>
       </body>
     </html>
   );
