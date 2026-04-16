@@ -29,7 +29,6 @@ export default function ProductListingClient({
 }: {
   products: StoreProduct[];
 }) {
-  console.log(products);
   const [activeCategory, setActiveCategory] = useState("Tất cả");
   const categories = ["Tất cả", "Áo", "Quần", "Phụ kiện"];
 

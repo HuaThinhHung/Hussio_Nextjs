@@ -9,6 +9,7 @@ export interface StoreProductVariant {
   availableForSale: boolean;
   price: MoneyAmount;
   compareAtPrice?: MoneyAmount;
+  quantityAvailable?: number;
   selectedOptions: Array<{ name: ProductOptionName; value: string }>;
 }
 

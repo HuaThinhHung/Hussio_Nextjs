@@ -13,5 +13,6 @@ export interface StoreProduct {
   image?: string;
   hoverImage?: string;
   colors?: string[];
+  firstVariantId?: string;
 }
 

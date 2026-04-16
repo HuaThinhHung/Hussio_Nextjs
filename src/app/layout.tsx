@@ -7,6 +7,8 @@ import AnnouncementBar from "@/components/layout/AnnouncementBar";
 import BackToTopButton from "@/components/common/BackToTopButton";
 import { seoConfig, siteConfig } from "@/config/site";
 import { CartProvider } from "@/context/CartContext";
+import CartDrawer from "@/components/cart/CartDrawer";
+import Toast from "@/components/common/Toast";
 
 const roboto = localFont({
   src: [
@@ -108,6 +110,8 @@ export default function RootLayout({
           <Header />
           <main className="grow">{children}</main>
           <Footer />
+          <CartDrawer />
+          <Toast />
           <BackToTopButton />
         </CartProvider>
       </body>

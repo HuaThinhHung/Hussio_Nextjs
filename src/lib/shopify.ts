@@ -1,6 +1,7 @@
 import type { StoreProduct } from '@/types/product';
 import type { StoreProductDetail, StoreProductVariant } from '@/types/product-detail';
 import type { StoreCart } from '@/types/cart';
+import { isColorOption } from './product-utils';
 
 type ShopifyEnv = {
   domain: string;
@@ -30,48 +31,56 @@ function getShopifyEnv(): ShopifyEnv {
   return { domain, token, apiVersion };
 }
 
-async function shopifyFetch<T>(query: string, variables?: Record<string, unknown>): Promise<T> {
+async function shopifyFetch<T>(
+  query: string,
+  variables?: Record<string, unknown>,
+  tags?: string[]
+): Promise<T> {
   const { domain, token, apiVersion } = getShopifyEnv();
+  const endpoint = `https://${domain}/api/${apiVersion}/graphql.json`;
 
-  const res = await fetch(`https://${domain}/api/${apiVersion}/graphql.json`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Shopify-Storefront-Access-Token': token,
-    },
-    body: JSON.stringify({ query, variables }),
-    // Products change; keep it reasonably fresh in production.
-    next: { revalidate: 60 },
-  });
+  const fetchWithRetry = async (retries = 3): Promise<T> => {
+    try {
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Shopify-Storefront-Access-Token': token,
+        },
+        body: JSON.stringify({ query, variables }),
+        next: { 
+          revalidate: 60,
+          tags: tags || ['shopify']
+        },
+      });
 
-  if (!res.ok) {
-    const text = await res.text().catch(() => '');
-    throw new Error(`Shopify fetch failed (${res.status}). ${text}`);
-  }
+      if (!res.ok) {
+        const text = await res.text().catch(() => '');
+        throw new Error(`Shopify fetch failed (${res.status}). ${text}`);
+      }
 
-  const json = (await res.json()) as { data?: T; errors?: Array<{ message: string }> };
-  
-  if (json.errors) {
-    const errorMsg = json.errors.map(e => e.message).join(', ');
-    console.error(`[Shopify Error] GraphQL Errors: ${errorMsg}`);
-    throw new Error(`Shopify GraphQL error: ${errorMsg}`);
-  }
+      const json = (await res.json()) as { data?: T; errors?: Array<{ message: string }> };
 
-  if (!json.data) {
-    console.error('[Shopify Error] No data returned from GraphQL.');
-    throw new Error('Shopify GraphQL returned no data.');
-  }
+      if (json.errors) {
+        const errorMsg = json.errors.map((e) => e.message).join(', ');
+        throw new Error(`Shopify GraphQL error: ${errorMsg}`);
+      }
 
-  // Diagnostic logging for empty product/collection results
-  const dataObj = json.data as any;
-  if (dataObj.products && (!dataObj.products.edges || dataObj.products.edges.length === 0)) {
-    console.warn('[Shopify Warning] Products query returned 200 OK but 0 products. Check if products are PUBLISHED to the Storefront sales channel.');
-  }
-  if (dataObj.productByHandle === null && variables?.handle) {
-    console.warn(`[Shopify Warning] productByHandle returned null for handle "${variables.handle}". Check if the handle is correct and published.`);
-  }
+      if (!json.data) {
+        throw new Error('Shopify GraphQL returned no data.');
+      }
 
-  return json.data;
+      return json.data;
+    } catch (error) {
+      if (retries > 0) {
+        console.warn(`[Shopify] Fetch failed, retrying... (${retries} left)`);
+        return fetchWithRetry(retries - 1);
+      }
+      throw error;
+    }
+  };
+
+  return fetchWithRetry();
 }
 
 function toNumber(amount: string | null | undefined): number | undefined {
@@ -82,7 +91,13 @@ function toNumber(amount: string | null | undefined): number | undefined {
 
 type ShopifyImageEdge = { node: { url: string | null; altText?: string | null } | null } | null;
 type ShopifyVariantEdge = {
-  node: { availableForSale?: boolean; selectedOptions: Array<{ name: string; value: string }> } | null;
+  node: { 
+    id: string;
+    availableForSale: boolean;
+    price: { amount: string };
+    compareAtPrice?: { amount: string } | null;
+    selectedOptions: Array<{ name: string; value: string }>;
+  } | null;
 } | null;
 
 type ShopifyProductNode = {
@@ -113,11 +128,11 @@ function mapProduct(node: ShopifyProductNode): StoreProduct {
   // Gom màu unique từ TẤT CẢ variants (không chỉ variant đầu tiên)
   const allVariantOptions = (node.variants?.edges || [])
     .flatMap((e) => e?.node?.selectedOptions ?? []);
-  const COLOR_KEYS = new Set(['color', 'màu', 'mau', 'colour']);
+  
   const colors = [
     ...new Set(
       allVariantOptions
-        .filter((o) => COLOR_KEYS.has((o?.name ?? '').toLowerCase().trim()))
+        .filter((o) => isColorOption(o?.name ?? ''))
         .map((o) => o.value)
         .filter(Boolean)
     ),
@@ -141,6 +156,7 @@ function mapProduct(node: ShopifyProductNode): StoreProduct {
     image: node.featuredImage?.url || images[0],
     hoverImage: images[1] || node.featuredImage?.url || images[0],
     colors: colors.length ? colors : undefined,
+    firstVariantId: node.variants?.edges?.[0]?.node?.id,
   };
 }
 
@@ -180,6 +196,7 @@ const PRODUCT_CARD_FRAGMENT = /* GraphQL */ `
     variants(first: 100) {
       edges {
         node {
+          id
           availableForSale
           selectedOptions {
             name

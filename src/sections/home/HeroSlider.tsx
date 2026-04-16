@@ -1,4 +1,4 @@
- "use client";
+"use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
@@ -25,7 +25,7 @@ const HeroSlider = () => {
       { src: banner4, alt: "HUSSIO banner 4", href: "/products" },
       { src: banner5, alt: "HUSSIO banner 5", href: "/products" },
     ],
-    []
+    [],
   );
 
   const scrollerRef = useRef<HTMLDivElement | null>(null);
@@ -43,8 +43,10 @@ const HeroSlider = () => {
     el.scrollTo({ left: idx * w, behavior });
   };
 
-  const goPrev = () => scrollToIndex((activeIndex - 1 + slides.length) % slides.length, "smooth");
-  const goNext = () => scrollToIndex((activeIndex + 1) % slides.length, "smooth");
+  const goPrev = () =>
+    scrollToIndex((activeIndex - 1 + slides.length) % slides.length, "smooth");
+  const goNext = () =>
+    scrollToIndex((activeIndex + 1) % slides.length, "smooth");
 
   useEffect(() => {
     const el = scrollerRef.current;
@@ -116,7 +118,11 @@ const HeroSlider = () => {
   };
 
   return (
-    <section aria-roledescription="carousel" aria-label="HUSSIO banner carousel" className="w-full">
+    <section
+      aria-roledescription="carousel"
+      aria-label="HUSSIO banner carousel"
+      className="w-full"
+    >
       <div className="relative w-full h-full">
         <div
           ref={scrollerRef}
@@ -158,8 +164,18 @@ const HeroSlider = () => {
           onClick={goPrev}
           className="absolute left-3 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/20 bg-white/10 p-3 text-white backdrop-blur-md transition hover:bg-white/20 focus:outline-none focus-visible:ring-4 focus-visible:ring-white/40"
         >
-          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+          <svg
+            viewBox="0 0 24 24"
+            className="h-5 w-5"
+            fill="none"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M15 19l-7-7 7-7"
+            />
           </svg>
         </button>
         <button
@@ -168,8 +184,18 @@ const HeroSlider = () => {
           onClick={goNext}
           className="absolute right-3 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/20 bg-white/10 p-3 text-white backdrop-blur-md transition hover:bg-white/20 focus:outline-none focus-visible:ring-4 focus-visible:ring-white/40"
         >
-          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+          <svg
+            viewBox="0 0 24 24"
+            className="h-5 w-5"
+            fill="none"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M9 5l7 7-7 7"
+            />
           </svg>
         </button>
 
@@ -183,7 +209,9 @@ const HeroSlider = () => {
               onClick={() => scrollToIndex(i, "smooth")}
               className={[
                 "h-1.5 w-6 rounded-full transition-all duration-300",
-                i === activeIndex ? "bg-white" : "bg-white/40 hover:bg-white/70",
+                i === activeIndex
+                  ? "bg-white"
+                  : "bg-white/40 hover:bg-white/70",
               ].join(" ")}
             />
           ))}

@@ -23,8 +23,8 @@ export const siteConfig = {
   },
   navigation: [
     { name: "NEW-IN", href: "/new-in" },
-    { name: "SẢN PHẨM MỚI", href: "/products" },
-    { name: "BỘ SƯU TẬP MỚI", href: "/collections" },
+    { name: "SẢN PHẨM", href: "/products" },
+    { name: "BỘ SƯU TẬP", href: "/collections" },
     { name: "LIÊN HỆ", href: "/contact" },
     { name: "SALE 50%", href: "/sale" },
   ],
@@ -69,10 +69,12 @@ export const seoConfig = {
   },
   login: {
     title: "Đăng nhập | HUSSIO",
-    description: "Đăng nhập tài khoản HUSSIO để quản lý thông tin và hoạt động mua sắm.",
+    description:
+      "Đăng nhập tài khoản HUSSIO để quản lý thông tin và hoạt động mua sắm.",
   },
   register: {
     title: "Đăng ký | HUSSIO",
-    description: "Tạo tài khoản HUSSIO để mua sắm nhanh hơn và theo dõi đơn hàng.",
+    description:
+      "Tạo tài khoản HUSSIO để mua sắm nhanh hơn và theo dõi đơn hàng.",
   },
 } as const;

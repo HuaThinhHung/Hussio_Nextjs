@@ -17,13 +17,15 @@ type CollectionCard = {
 const cards: CollectionCard[] = [
   {
     title: "Collenction Sơ Mi Tối Giản",
-    description: "Bô siêu tập sơ mi trơn tối giản, tập trung vào chất liệu, gam màu và phom dáng.",
+    description:
+      "Bô siêu tập sơ mi trơn tối giản, tập trung vào chất liệu, gam màu và phom dáng.",
     image: banner1,
     href: "/collections",
   },
   {
     title: "Collenction Tết 2026",
-    description: "Bộ siêu tập tết nguyên đán thiết kế, nhấn mạnh vào chi tiết tạo điểm nhấn khác biệt.",
+    description:
+      "Bộ siêu tập tết nguyên đán thiết kế, nhấn mạnh vào chi tiết tạo điểm nhấn khác biệt.",
     image: banner2,
     href: "/collections",
   },
@@ -68,4 +70,3 @@ export default function CollectionBanners() {
     </section>
   );
 }
-

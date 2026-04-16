@@ -1,6 +1,6 @@
-import React from 'react';
-import Link from 'next/link';
-import { categories } from '@/config/categories';
+import React from "react";
+import Link from "next/link";
+import { categories } from "@/config/categories";
 
 const CategoryGrid = () => {
   return (
@@ -16,13 +16,9 @@ const CategoryGrid = () => {
 
       <div className="grid grid-cols-3 gap-2 md:gap-8">
         {categories.map((cat) => (
-          <Link
-            key={cat.title}
-            href={cat.link}
-            className="group flex flex-col"
-          >
+          <Link key={cat.title} href={cat.link} className="group flex flex-col">
             {/* Ảnh */}
-            <div className="relative h-[220px] sm:h-[320px] md:h-[550px] overflow-hidden bg-zinc-100 border border-zinc-200 shadow-sm">
+            <div className="relative h-[200px] sm:h-[320px] md:h-[300px] overflow-hidden bg-zinc-100 border border-zinc-200 shadow-sm">
               <img
                 src={cat.image}
                 alt={cat.title}

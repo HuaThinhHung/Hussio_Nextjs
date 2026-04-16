@@ -41,21 +41,25 @@ export default async function ProductDetailPage({ params }: { params: ParamsLike
 
   return (
     <div className="bg-white min-h-screen">
-      <div className="container mx-auto px-4 py-10 md:py-20 animate-fade-in">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          <ProductGallery 
-            images={detail.images} 
-            title={detail.title} 
-          />
-
-          <div className="lg:col-span-5 space-y-8">
-            <ProductInfo 
+      <div className="container mx-auto px-4 py-8 md:py-12 animate-fade-in max-w-screen-xl">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
+          <div className="lg:col-span-7">
+            <ProductGallery 
+              images={detail.images} 
               title={detail.title} 
-              variants={detail.variants}
-              options={detail.options}
-              warranty={detail.warranty}
             />
-            <ProductAccordions descriptionHtml={detail.descriptionHtml} warranty={detail.warranty} />
+          </div>
+
+          <div className="lg:col-span-5">
+            <div className="lg:sticky lg:top-24 space-y-8">
+              <ProductInfo 
+                title={detail.title} 
+                variants={detail.variants}
+                options={detail.options}
+                warranty={detail.warranty}
+              />
+              <ProductAccordions descriptionHtml={detail.descriptionHtml} warranty={detail.warranty} />
+            </div>
           </div>
         </div>
         <div className="mt-12">
