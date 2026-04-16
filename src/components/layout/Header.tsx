@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
@@ -12,15 +12,80 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<'products' | 'collections' | null>(null);
+  const [mobileActiveSubmenu, setMobileActiveSubmenu] = useState<'products' | 'collections' | null>(null);
   const [leaveTimeout, setLeaveTimeout] = useState<NodeJS.Timeout | null>(null);
   const { cart, openDrawer } = useCart();
   const cartCount = cart?.totalQuantity || 0;
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      const scrollY = window.scrollY;
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      
+      document.body.style.overflow = "hidden";
+      document.body.style.position = "fixed";
+      document.body.style.top = "0";
+      document.body.style.left = "0";
+      document.body.style.right = "0";
+      document.body.style.bottom = "0";
+      document.body.style.paddingRight = scrollbarWidth > 0 ? `${scrollbarWidth}px` : "0";
+      document.body.style.width = "100vw";
+      document.body.style.height = "100vh";
+      document.body.style.overflow = "hidden";
+      document.body.style.overscrollBehavior = "none";
+      document.body.style.touchAction = "none";
+      
+      document.documentElement.style.scrollBehavior = "auto";
+      
+      requestAnimationFrame(() => {
+        document.body.style.height = `${scrollY + window.innerHeight}px`;
+      });
+    } else {
+      const scrollY = parseInt(document.body.style.height || "0") - window.innerHeight;
+      
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
+      document.body.style.bottom = "";
+      document.body.style.paddingRight = "";
+      document.body.style.width = "";
+      document.body.style.height = "";
+      document.body.style.overscrollBehavior = "";
+      document.body.style.touchAction = "";
+      
+      document.documentElement.style.scrollBehavior = "";
+      
+      requestAnimationFrame(() => {
+        window.scrollTo(0, Math.max(0, scrollY));
+      });
+    }
+    
+    return () => {
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
+      document.body.style.bottom = "";
+      document.body.style.paddingRight = "";
+      document.body.style.width = "";
+      document.body.style.height = "";
+      document.body.style.overscrollBehavior = "";
+      document.body.style.touchAction = "";
+      document.documentElement.style.scrollBehavior = "";
+    };
+  }, [isMobileMenuOpen]);
 
   const navLinks = siteConfig.navigation;
 
@@ -213,16 +278,103 @@ const Header = () => {
               aria-label="Mobile navigation"
               className="flex flex-col space-y-6 text-[10px] font-semibold tracking-[0.18em] uppercase"
             >
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className="flex justify-between items-center transition-all duration-300 border-b border-zinc-100 pb-4 hover:pl-2 hover:text-zinc-500"
-                  onClick={() => setIsMobileMenuOpen(false)}
+              {/* NEW-IN - Link trực tiếp, hàng đầu tiên */}
+              <Link
+                href="/new-in"
+                className="flex justify-between items-center transition-all duration-300 border-b border-zinc-100 pb-4 hover:pl-2 hover:text-zinc-500"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <span>NEW-IN</span>
+              </Link>
+
+              {/* Products Submenu */}
+              <div className="border-b border-zinc-100 pb-4">
+                <button
+                  className="flex justify-between items-center w-full hover:pl-2 hover:text-zinc-500 transition-all"
+                  onClick={() => setMobileActiveSubmenu(mobileActiveSubmenu === 'products' ? null : 'products')}
                 >
-                  <span>{link.name}</span>
-                </Link>
-              ))}
+                  <span>SẢN PHẨM</span>
+                  <svg
+                    className={cn(
+                      "w-4 h-4 transition-transform duration-300",
+                      mobileActiveSubmenu === 'products' ? "rotate-180" : ""
+                    )}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <div
+                  className={cn(
+                    "overflow-hidden transition-all duration-300 ease-out",
+                    mobileActiveSubmenu === 'products' ? "max-h-48 opacity-100 mt-4" : "max-h-0 opacity-0"
+                  )}
+                >
+                  <div className="flex flex-col space-y-3 pl-4">
+                    <Link href="/products" className="text-zinc-500 hover:text-black transition-colors">Áo Polo</Link>
+                    <Link href="/products" className="text-zinc-500 hover:text-black transition-colors">Áo Thun (Tee)</Link>
+                    <Link href="/products" className="text-zinc-500 hover:text-black transition-colors">Áo Sơ mi</Link>
+                    <Link href="/products" className="text-zinc-500 hover:text-black transition-colors">Áo Khoác (Jacket)</Link>
+                    <Link href="/products" className="text-zinc-500 hover:text-black transition-colors">Quần Kaki</Link>
+                    <Link href="/products" className="text-zinc-500 hover:text-black transition-colors">Quần Tây</Link>
+                    <Link href="/products" className="text-zinc-500 hover:text-black transition-colors">Phụ Kiện</Link>
+                  </div>
+                </div>
+              </div>
+
+              {/* Collections Submenu */}
+              <div className="border-b border-zinc-100 pb-4">
+                <button
+                  className="flex justify-between items-center w-full hover:pl-2 hover:text-zinc-500 transition-all"
+                  onClick={() => setMobileActiveSubmenu(mobileActiveSubmenu === 'collections' ? null : 'collections')}
+                >
+                  <span>BỘ SƯU TẬP</span>
+                  <svg
+                    className={cn(
+                      "w-4 h-4 transition-transform duration-300",
+                      mobileActiveSubmenu === 'collections' ? "rotate-180" : ""
+                    )}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <div
+                  className={cn(
+                    "overflow-hidden transition-all duration-300 ease-out",
+                    mobileActiveSubmenu === 'collections' ? "max-h-48 opacity-100 mt-4" : "max-h-0 opacity-0"
+                  )}
+                >
+                  <div className="flex flex-col space-y-3 pl-4">
+                    <Link href="/collections" className="text-zinc-500 hover:text-black transition-colors">Quiet Strength</Link>
+                    <Link href="/collections" className="text-zinc-500 hover:text-black transition-colors">Modern Black</Link>
+                    <Link href="/collections" className="text-zinc-500 hover:text-black transition-colors">Summer Essentials</Link>
+                    <Link href="/collections" className="text-zinc-500 hover:text-black transition-colors">Hussio Classic</Link>
+                  </div>
+                </div>
+              </div>
+
+              {/* LIÊN HỆ */}
+              <Link
+                href="/contact"
+                className="flex justify-between items-center transition-all duration-300 border-b border-zinc-100 pb-4 hover:pl-2 hover:text-zinc-500"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <span>LIÊN HỆ</span>
+              </Link>
+
+              {/* SALE 50% */}
+              <Link
+                href="/sale"
+                className="flex justify-between items-center transition-all duration-300 border-b border-zinc-100 pb-4 hover:pl-2 hover:text-zinc-500 text-red-600"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <span>SALE 50%</span>
+              </Link>
             </nav>
             <div className="mt-16 space-y-6 pt-8 border-t border-zinc-200">
               <Link
