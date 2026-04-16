@@ -12,6 +12,7 @@ export default function GalleryPage() {
   const [title, setTitle] = useState<string>("");
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isZoomed, setIsZoomed] = useState(false);
 
   const allImages = images.length > 0 ? images : ["/images/tee.webp"];
 
@@ -31,6 +32,11 @@ export default function GalleryPage() {
     }
   }, []);
 
+  // Reset zoom khi chuyển ảnh
+  useEffect(() => {
+    setIsZoomed(false);
+  }, [lightboxIndex]);
+
   const closeLightbox = () => {
     sessionStorage.removeItem("galleryStartIndex");
     router.push(`/products/${handle}`);
@@ -39,6 +45,7 @@ export default function GalleryPage() {
   const nextImage = () => {
     if (isTransitioning) return;
     setIsTransitioning(true);
+    setIsZoomed(false);
     setTimeout(() => {
       setLightboxIndex((prev) => (prev + 1) % allImages.length);
       setTimeout(() => setIsTransitioning(false), 200);
@@ -48,6 +55,7 @@ export default function GalleryPage() {
   const prevImage = () => {
     if (isTransitioning) return;
     setIsTransitioning(true);
+    setIsZoomed(false);
     setTimeout(() => {
       setLightboxIndex(
         (prev) => (prev - 1 + allImages.length) % allImages.length,
@@ -58,7 +66,12 @@ export default function GalleryPage() {
 
   const goToImage = (index: number) => {
     if (index === lightboxIndex || isTransitioning) return;
+    setIsZoomed(false);
     setLightboxIndex(index);
+  };
+
+  const toggleZoom = () => {
+    setIsZoomed(!isZoomed);
   };
 
   useEffect(() => {
@@ -109,12 +122,12 @@ export default function GalleryPage() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Image Container */}
-        <div className="flex-1 flex items-center justify-center relative bg-zinc-50">
+        <div className="flex-1 flex items-center justify-center relative bg-zinc-50 overflow-hidden">
           {/* Prev Button */}
           <button
             onClick={prevImage}
             disabled={isTransitioning}
-            className="absolute left-4 z-10 w-12 h-12 flex items-center justify-center text-zinc-400 hover:text-black bg-white/80 hover:bg-white shadow-md rounded-full transition-all duration-200 disabled:opacity-50"
+            className="absolute left-4 z-20 w-12 h-12 flex items-center justify-center text-zinc-400 hover:text-black bg-white/80 hover:bg-white shadow-md rounded-full transition-all duration-200 disabled:opacity-50"
           >
             <svg
               className="w-6 h-6"
@@ -131,17 +144,21 @@ export default function GalleryPage() {
             </svg>
           </button>
 
-          {/* Image */}
+          {/* Image - Click để zoom */}
           <div
             className={cn(
-              "relative transition-all duration-200",
-              isTransitioning ? "opacity-0 scale-98" : "opacity-100 scale-100"
+              "relative transition-all duration-300 ease-out cursor-zoom-in",
+              isTransitioning ? "opacity-0" : "opacity-100"
             )}
+            onClick={toggleZoom}
           >
             <img
               src={allImages[lightboxIndex]}
               alt={title}
-              className="max-w-[90vw] max-h-[75vh] object-contain select-none"
+              className={cn(
+                "max-w-[85vw] max-h-[70vh] object-contain select-none transition-all duration-300",
+                isZoomed && "scale-150"
+              )}
               draggable={false}
             />
           </div>
@@ -150,7 +167,7 @@ export default function GalleryPage() {
           <button
             onClick={nextImage}
             disabled={isTransitioning}
-            className="absolute right-4 z-10 w-12 h-12 flex items-center justify-center text-zinc-400 hover:text-black bg-white/80 hover:bg-white shadow-md rounded-full transition-all duration-200 disabled:opacity-50"
+            className="absolute right-4 z-20 w-12 h-12 flex items-center justify-center text-zinc-400 hover:text-black bg-white/80 hover:bg-white shadow-md rounded-full transition-all duration-200 disabled:opacity-50"
           >
             <svg
               className="w-6 h-6"
@@ -166,6 +183,13 @@ export default function GalleryPage() {
               />
             </svg>
           </button>
+
+          {/* Zoom hint */}
+          {isZoomed && (
+            <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/70 text-white text-xs px-3 py-1.5 rounded-full">
+              Click để về 100%
+            </div>
+          )}
         </div>
 
         {/* Thumbnails - Bottom */}
