@@ -1,7 +1,7 @@
-import React from 'react';
-import Link from 'next/link';
-import ProductGrid from '@/components/product/ProductGrid';
-import type { StoreProduct } from '@/types/product';
+import React from "react";
+import Link from "next/link";
+import ProductGrid from "@/components/product/ProductGrid";
+import type { StoreProduct } from "@/types/product";
 
 interface ProductSectionProps {
   title: string;
@@ -15,13 +15,16 @@ const ProductSection = ({ title, products }: ProductSectionProps) => {
         <h2 className="text-base md:text-xl font-black tracking-tight uppercase">
           {title}
         </h2>
-        <Link href="/products" className="text-[10px] font-semibold tracking-[0.16em] uppercase hover:underline underline-offset-4">
+        <Link
+          href="/products"
+          className="text-[10px] font-semibold tracking-[0.16em] uppercase hover:underline underline-offset-4"
+        >
           XEM TẤT CẢ
         </Link>
       </div>
-      
+
       <ProductGrid products={products} columns={4} />
-      
+
       <div className="mt-10 md:mt-12 text-center">
         <Link
           href="/products"
