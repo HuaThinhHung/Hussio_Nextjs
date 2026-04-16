@@ -1,24 +1,30 @@
-import React from 'react';
-import ProductGrid from '@/components/product/ProductGrid';
-import ProductGallery from '@/components/product/ProductGallery';
-import ProductInfo from '@/components/product/ProductInfo';
-import ProductAccordions from '@/components/product/ProductAccordions';
-import TrustBadge from '@/components/common/TrustBadge';
-import BusinessCta from '@/components/common/BusinessCta';
-import { getProductDetailByHandle, getProducts } from '@/lib/shopify';
+import React from "react";
+import ProductGrid from "@/components/product/ProductGrid";
+import ProductGallery from "@/components/product/ProductGallery";
+import ProductInfo from "@/components/product/ProductInfo";
+import ProductAccordions from "@/components/product/ProductAccordions";
+import TrustBadge from "@/components/common/TrustBadge";
+import BusinessCta from "@/components/common/BusinessCta";
+import { getProductDetailByHandle, getProducts } from "@/lib/shopify";
 
 type ParamsLike = { handle?: string } | Promise<{ handle?: string }>;
 
-export default async function ProductDetailPage({ params }: { params: ParamsLike }) {
+export default async function ProductDetailPage({
+  params,
+}: {
+  params: ParamsLike;
+}) {
   const resolved = await params;
-  const rawHandle = resolved?.handle || '';
+  const rawHandle = resolved?.handle || "";
   const handle = decodeURIComponent(rawHandle);
 
   if (!handle || handle.trim().length === 0) {
     return (
       <div className="bg-white min-h-screen">
         <div className="container mx-auto px-4 py-10 md:py-20">
-          <p className="text-center text-sm text-zinc-500">Không tìm thấy sản phẩm.</p>
+          <p className="text-center text-sm text-zinc-500">
+            Không tìm thấy sản phẩm.
+          </p>
         </div>
       </div>
     );
@@ -31,36 +37,44 @@ export default async function ProductDetailPage({ params }: { params: ParamsLike
     return (
       <div className="bg-white min-h-screen">
         <div className="container mx-auto px-4 py-10 md:py-20">
-          <p className="text-center text-sm text-zinc-500">Không tìm thấy sản phẩm.</p>
+          <p className="text-center text-sm text-zinc-500">
+            Không tìm thấy sản phẩm.
+          </p>
         </div>
       </div>
     );
   }
 
-  const relatedProducts = products.filter((x) => x.id !== detail.id).slice(0, 4);
+  const relatedProducts = products
+    .filter((x) => x.id !== detail.id)
+    .slice(0, 4);
 
   return (
     <div className="bg-white min-h-screen">
-      <div className="container mx-auto px-4 py-8 md:py-12 animate-fade-in max-w-screen-xl">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
-          <div className="lg:col-span-7">
-            <ProductGallery 
-              images={detail.images} 
-              title={detail.title} 
-            />
+      <div className="container mx-auto px-4 py-8 md:py-12 animate-fade-in max-w-7xl">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-start">
+          <div className="lg:col-span-8">
+            <ProductGallery images={detail.images} title={detail.title} handle={handle} />
           </div>
 
-          <div className="lg:col-span-5">
-            <div className="lg:sticky lg:top-24 space-y-8">
-              <ProductInfo 
-                title={detail.title} 
+          <div className="lg:col-span-4">
+            <div className="space-y-8">
+              <ProductInfo
+                title={detail.title}
                 variants={detail.variants}
                 options={detail.options}
                 warranty={detail.warranty}
               />
-              <ProductAccordions descriptionHtml={detail.descriptionHtml} warranty={detail.warranty} />
             </div>
           </div>
+        </div>
+
+        {/* Description Below Gallery */}
+        <div className="mt-12 max-w-5xl mx-auto">
+          <ProductAccordions
+            descriptionHtml={detail.descriptionHtml}
+            warranty={detail.warranty}
+          />
         </div>
         <div className="mt-12">
           <TrustBadge />
@@ -71,11 +85,13 @@ export default async function ProductDetailPage({ params }: { params: ParamsLike
 
         <div className="mt-24">
           <div className="text-center mb-10">
-            <h2 className="text-sm font-semibold tracking-[0.2em] uppercase opacity-80">SẢN PHẨM LIÊN QUAN</h2>
+            <h2 className="text-xl font-semibold tracking-[0.2em] uppercase opacity-80">
+              Bạn sẽ thích sản phẩm này
+            </h2>
           </div>
           <ProductGrid products={relatedProducts} columns={4} />
         </div>
       </div>
     </div>
   );
-};
+}
