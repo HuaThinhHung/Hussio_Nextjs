@@ -54,7 +54,11 @@ export default async function ProductDetailPage({
       <div className="container mx-auto px-4 py-8 md:py-12 animate-fade-in max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-start">
           <div className="lg:col-span-8">
-            <ProductGallery images={detail.images} title={detail.title} handle={handle} />
+            <ProductGallery
+              images={detail.images}
+              title={detail.title}
+              handle={handle}
+            />
           </div>
 
           <div className="lg:col-span-4">

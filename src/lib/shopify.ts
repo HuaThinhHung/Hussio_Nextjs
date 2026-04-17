@@ -1,7 +1,10 @@
-import type { StoreProduct } from '@/types/product';
-import type { StoreProductDetail, StoreProductVariant } from '@/types/product-detail';
-import type { StoreCart } from '@/types/cart';
-import { isColorOption } from './product-utils';
+import type { StoreProduct } from "@/types/product";
+import type {
+  StoreProductDetail,
+  StoreProductVariant,
+} from "@/types/product-detail";
+import type { StoreCart } from "@/types/cart";
+import { isColorOption } from "./product-utils";
 
 type ShopifyEnv = {
   domain: string;
@@ -13,18 +16,18 @@ function getShopifyEnv(): ShopifyEnv {
   const domain =
     process.env.SHOPIFY_STORE_DOMAIN ||
     process.env.NEXT_PUBLIC_SHOPIFY_DOMAIN || // fallback for existing local setup (should migrate off)
-    '';
+    "";
 
   const token =
     process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN ||
     process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN || // fallback for existing local setup (should migrate off)
-    '';
+    "";
 
-  const apiVersion = process.env.SHOPIFY_API_VERSION || '2025-01';
+  const apiVersion = process.env.SHOPIFY_API_VERSION || "2025-01";
 
   if (!domain || !token) {
     throw new Error(
-      'Missing Shopify env. Set SHOPIFY_STORE_DOMAIN and SHOPIFY_STOREFRONT_ACCESS_TOKEN (server-side).'
+      "Missing Shopify env. Set SHOPIFY_STORE_DOMAIN and SHOPIFY_STOREFRONT_ACCESS_TOKEN (server-side).",
     );
   }
 
@@ -34,7 +37,7 @@ function getShopifyEnv(): ShopifyEnv {
 async function shopifyFetch<T>(
   query: string,
   variables?: Record<string, unknown>,
-  tags?: string[]
+  tags?: string[],
 ): Promise<T> {
   const { domain, token, apiVersion } = getShopifyEnv();
   const endpoint = `https://${domain}/api/${apiVersion}/graphql.json`;
@@ -42,32 +45,35 @@ async function shopifyFetch<T>(
   const fetchWithRetry = async (retries = 3): Promise<T> => {
     try {
       const res = await fetch(endpoint, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'X-Shopify-Storefront-Access-Token': token,
+          "Content-Type": "application/json",
+          "X-Shopify-Storefront-Access-Token": token,
         },
         body: JSON.stringify({ query, variables }),
-        next: { 
+        next: {
           revalidate: 60,
-          tags: tags || ['shopify']
+          tags: tags || ["shopify"],
         },
       });
 
       if (!res.ok) {
-        const text = await res.text().catch(() => '');
+        const text = await res.text().catch(() => "");
         throw new Error(`Shopify fetch failed (${res.status}). ${text}`);
       }
 
-      const json = (await res.json()) as { data?: T; errors?: Array<{ message: string }> };
+      const json = (await res.json()) as {
+        data?: T;
+        errors?: Array<{ message: string }>;
+      };
 
       if (json.errors) {
-        const errorMsg = json.errors.map((e) => e.message).join(', ');
+        const errorMsg = json.errors.map((e) => e.message).join(", ");
         throw new Error(`Shopify GraphQL error: ${errorMsg}`);
       }
 
       if (!json.data) {
-        throw new Error('Shopify GraphQL returned no data.');
+        throw new Error("Shopify GraphQL returned no data.");
       }
 
       return json.data;
@@ -89,9 +95,11 @@ function toNumber(amount: string | null | undefined): number | undefined {
   return Number.isFinite(n) ? n : undefined;
 }
 
-type ShopifyImageEdge = { node: { url: string | null; altText?: string | null } | null } | null;
+type ShopifyImageEdge = {
+  node: { url: string | null; altText?: string | null } | null;
+} | null;
 type ShopifyVariantEdge = {
-  node: { 
+  node: {
     id: string;
     availableForSale: boolean;
     price: { amount: string };
@@ -111,7 +119,9 @@ type ShopifyProductNode = {
   featuredImage?: { url: string | null; altText?: string | null } | null;
   images?: { edges: ShopifyImageEdge[] } | null;
   priceRange?: { minVariantPrice?: { amount?: string | null } | null } | null;
-  compareAtPriceRange?: { minVariantPrice?: { amount?: string | null } | null } | null;
+  compareAtPriceRange?: {
+    minVariantPrice?: { amount?: string | null } | null;
+  } | null;
   variants?: { edges: ShopifyVariantEdge[] } | null;
 };
 
@@ -121,27 +131,33 @@ function mapProduct(node: ShopifyProductNode): StoreProduct {
       ?.map((e) => e?.node?.url || undefined)
       .filter((u): u is string => Boolean(u)) ?? [];
 
-  const price = toNumber(node.priceRange?.minVariantPrice?.amount ?? undefined) ?? 0;
+  const price =
+    toNumber(node.priceRange?.minVariantPrice?.amount ?? undefined) ?? 0;
   // Dùng minVariantPrice để nhất quán với price
-  const compareAtPrice = toNumber(node.compareAtPriceRange?.minVariantPrice?.amount ?? undefined);
+  const compareAtPrice = toNumber(
+    node.compareAtPriceRange?.minVariantPrice?.amount ?? undefined,
+  );
 
   // Gom màu unique từ TẤT CẢ variants (không chỉ variant đầu tiên)
-  const allVariantOptions = (node.variants?.edges || [])
-    .flatMap((e) => e?.node?.selectedOptions ?? []);
-  
+  const allVariantOptions = (node.variants?.edges || []).flatMap(
+    (e) => e?.node?.selectedOptions ?? [],
+  );
+
   const colors = [
     ...new Set(
       allVariantOptions
-        .filter((o) => isColorOption(o?.name ?? ''))
+        .filter((o) => isColorOption(o?.name ?? ""))
         .map((o) => o.value)
-        .filter(Boolean)
+        .filter(Boolean),
     ),
   ];
 
   // availableForSale: true nếu ít nhất 1 variant còn hàng
   const availableForSale =
     node.availableForSale ??
-    (node.variants?.edges || []).some((e) => e?.node?.availableForSale === true);
+    (node.variants?.edges || []).some(
+      (e) => e?.node?.availableForSale === true,
+    );
 
   return {
     id: node.id,
@@ -229,7 +245,9 @@ export async function getProducts(first = 50): Promise<StoreProduct[]> {
   return data.products.edges.map((e) => mapProduct(e.node));
 }
 
-export async function getProductByHandle(handle: string): Promise<StoreProduct | null> {
+export async function getProductByHandle(
+  handle: string,
+): Promise<StoreProduct | null> {
   const query = /* GraphQL */ `
     ${PRODUCT_CARD_FRAGMENT}
     query ProductByHandle($handle: String!) {
@@ -239,7 +257,9 @@ export async function getProductByHandle(handle: string): Promise<StoreProduct |
     }
   `;
 
-  const data = await shopifyFetch<{ productByHandle: ShopifyProductNode | null }>(query, { handle });
+  const data = await shopifyFetch<{
+    productByHandle: ShopifyProductNode | null;
+  }>(query, { handle });
   return data.productByHandle ? mapProduct(data.productByHandle) : null;
 }
 
@@ -281,7 +301,9 @@ function mapVariant(v: ShopifyVariantNodeFull): StoreProductVariant {
   };
 }
 
-export async function getProductDetailByHandle(handle: string): Promise<StoreProductDetail | null> {
+export async function getProductDetailByHandle(
+  handle: string,
+): Promise<StoreProductDetail | null> {
   const query = /* GraphQL */ `
     query ProductDetailByHandle($handle: String!) {
       productByHandle(handle: $handle) {
@@ -333,7 +355,9 @@ export async function getProductDetailByHandle(handle: string): Promise<StorePro
     }
   `;
 
-  const data = await shopifyFetch<{ productByHandle: ShopifyProductDetailNode | null }>(query, { handle });
+  const data = await shopifyFetch<{
+    productByHandle: ShopifyProductDetailNode | null;
+  }>(query, { handle });
   const p = data.productByHandle;
   if (!p) return null;
 
@@ -367,12 +391,15 @@ type ShopifyCartLineEdge = {
     id: string;
     quantity: number;
     merchandise: {
-      __typename: 'ProductVariant';
+      __typename: "ProductVariant";
       id: string;
       title: string;
       image?: { url: string | null } | null;
       price?: { amount?: string | null; currencyCode?: string | null } | null;
-      compareAtPrice?: { amount?: string | null; currencyCode?: string | null } | null;
+      compareAtPrice?: {
+        amount?: string | null;
+        currencyCode?: string | null;
+      } | null;
       selectedOptions: Array<{ name: string; value: string }>;
       product: { title: string; handle: string };
     };
@@ -390,7 +417,7 @@ type ShopifyCart = {
 };
 
 function mapCart(cart: ShopifyCart): StoreCart {
-  const currencyCode = cart.cost.subtotalAmount.currencyCode || 'VND';
+  const currencyCode = cart.cost.subtotalAmount.currencyCode || "VND";
   return {
     id: cart.id,
     checkoutUrl: cart.checkoutUrl,
@@ -406,7 +433,10 @@ function mapCart(cart: ShopifyCart): StoreCart {
           id: line.id,
           quantity: line.quantity,
           merchandiseId: v.id,
-          title: `${v.product.title} — ${v.title}`.replace(' — Default Title', ''),
+          title: `${v.product.title} — ${v.title}`.replace(
+            " — Default Title",
+            "",
+          ),
           image: v.image?.url || undefined,
           price: toNumber(v.price?.amount ?? undefined) ?? 0,
           compareAtPrice: toNumber(v.compareAtPrice?.amount ?? undefined),
@@ -496,11 +526,16 @@ export async function cartGet(cartId: string): Promise<StoreCart | null> {
     }
   `;
 
-  const data = await shopifyFetch<{ cart: ShopifyCart | null }>(query, { id: cartId });
+  const data = await shopifyFetch<{ cart: ShopifyCart | null }>(query, {
+    id: cartId,
+  });
   return data.cart ? mapCart(data.cart) : null;
 }
 
-export async function cartLinesAdd(cartId: string, lines: Array<{ merchandiseId: string; quantity: number }>) {
+export async function cartLinesAdd(
+  cartId: string,
+  lines: Array<{ merchandiseId: string; quantity: number }>,
+) {
   const query = /* GraphQL */ `
     ${CART_FRAGMENT}
     mutation CartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
@@ -525,7 +560,7 @@ export async function cartLinesAdd(cartId: string, lines: Array<{ merchandiseId:
 
 export async function cartLinesUpdate(
   cartId: string,
-  lines: Array<{ id: string; quantity: number }>
+  lines: Array<{ id: string; quantity: number }>,
 ): Promise<StoreCart> {
   const query = /* GraphQL */ `
     ${CART_FRAGMENT}
@@ -543,13 +578,19 @@ export async function cartLinesUpdate(
   `;
 
   const data = await shopifyFetch<{
-    cartLinesUpdate: { cart: ShopifyCart; userErrors: Array<{ message: string }> };
+    cartLinesUpdate: {
+      cart: ShopifyCart;
+      userErrors: Array<{ message: string }>;
+    };
   }>(query, { cartId, lines });
 
   return mapCart(data.cartLinesUpdate.cart);
 }
 
-export async function cartLinesRemove(cartId: string, lineIds: string[]): Promise<StoreCart> {
+export async function cartLinesRemove(
+  cartId: string,
+  lineIds: string[],
+): Promise<StoreCart> {
   const query = /* GraphQL */ `
     ${CART_FRAGMENT}
     mutation CartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
@@ -566,9 +607,11 @@ export async function cartLinesRemove(cartId: string, lineIds: string[]): Promis
   `;
 
   const data = await shopifyFetch<{
-    cartLinesRemove: { cart: ShopifyCart; userErrors: Array<{ message: string }> };
+    cartLinesRemove: {
+      cart: ShopifyCart;
+      userErrors: Array<{ message: string }>;
+    };
   }>(query, { cartId, lineIds });
 
   return mapCart(data.cartLinesRemove.cart);
 }
-

@@ -4,7 +4,11 @@ import React, { useState, useMemo, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import type { StoreProductVariant } from "@/types/product-detail";
 import { useCart } from "@/hooks/useCart";
-import { isColorOption, getColorHex, isGenderOption } from "@/lib/product-utils";
+import {
+  isColorOption,
+  getColorHex,
+  isGenderOption,
+} from "@/lib/product-utils";
 import { formatVnd } from "@/lib/utils";
 
 interface ProductInfoProps {
@@ -20,18 +24,23 @@ const ProductInfo = ({
   options = [],
 }: ProductInfoProps) => {
   const { add, loading: cartLoading, cart } = useCart();
-  
-  const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
+
+  const [selectedOptions, setSelectedOptions] = useState<
+    Record<string, string>
+  >({});
 
   // Initialize selected options from the first variant if available
   useEffect(() => {
     if (variants.length > 0 && Object.keys(selectedOptions).length === 0) {
       const initial: Record<string, string> = {};
-      variants[0].selectedOptions.forEach(opt => {
+      variants[0].selectedOptions.forEach((opt) => {
         initial[opt.name] = opt.value;
       });
       setSelectedOptions(initial);
-    } else if (options.length > 0 && Object.keys(selectedOptions).length === 0) {
+    } else if (
+      options.length > 0 &&
+      Object.keys(selectedOptions).length === 0
+    ) {
       const initial: Record<string, string> = {};
       options.forEach((opt) => {
         if (opt.values.length > 0) initial[opt.name] = opt.values[0];
@@ -45,9 +54,13 @@ const ProductInfo = ({
   // Find the matching variant based on selected options
   const selectedVariant = useMemo(() => {
     if (!variants.length) return null;
-    return variants.find((v) =>
-      v.selectedOptions.every((opt) => selectedOptions[opt.name] === opt.value),
-    ) || variants[0];
+    return (
+      variants.find((v) =>
+        v.selectedOptions.every(
+          (opt) => selectedOptions[opt.name] === opt.value,
+        ),
+      ) || variants[0]
+    );
   }, [variants, selectedOptions]);
 
   const price = selectedVariant?.price ?? 0;
@@ -96,72 +109,74 @@ const ProductInfo = ({
 
       {/* Variants Selection */}
       <div className="space-y-6">
-        {options.filter(opt => !isGenderOption(opt.name)).map((opt) => {
-          const isColor = isColorOption(opt.name);
-          const currentValue = selectedOptions[opt.name];
+        {options
+          .filter((opt) => !isGenderOption(opt.name))
+          .map((opt) => {
+            const isColor = isColorOption(opt.name);
+            const currentValue = selectedOptions[opt.name];
 
-          return (
-            <div key={opt.name} className="space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">
-                  {opt.name}
-                </span>
-                <span className="text-[10px] font-bold text-black uppercase tracking-wider">
-                  {currentValue}
-                </span>
-              </div>
-              
-              <div className="flex flex-wrap gap-2">
-                {opt.values.map((val) => {
-                  const isActive = currentValue === val;
-                  
-                  if (isColor) {
+            return (
+              <div key={opt.name} className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">
+                    {opt.name}
+                  </span>
+                  <span className="text-[10px] font-bold text-black uppercase tracking-wider">
+                    {currentValue}
+                  </span>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  {opt.values.map((val) => {
+                    const isActive = currentValue === val;
+
+                    if (isColor) {
+                      return (
+                        <button
+                          key={val}
+                          onClick={() => handleOptionChange(opt.name, val)}
+                          className={cn(
+                            "group relative w-8 h-8 flex items-center justify-center rounded-full transition-all duration-300",
+                            isActive
+                              ? "ring-2 ring-black ring-offset-2 scale-110"
+                              : "ring-1 ring-zinc-200 ring-offset-0 hover:ring-zinc-400",
+                          )}
+                          title={val}
+                        >
+                          <div
+                            className="w-full h-full rounded-full border border-black/5 shadow-inner transition-transform duration-500 group-hover:scale-90"
+                            style={{ backgroundColor: getColorHex(val) }}
+                          />
+                        </button>
+                      );
+                    }
+
                     return (
                       <button
                         key={val}
                         onClick={() => handleOptionChange(opt.name, val)}
                         className={cn(
-                          "group relative w-8 h-8 flex items-center justify-center rounded-full transition-all duration-300",
+                          "min-w-[48px] h-9 px-3 border text-[10px] font-black tracking-widest uppercase transition-all duration-300 rounded-[2px]",
                           isActive
-                            ? "ring-2 ring-black ring-offset-2 scale-110"
-                            : "ring-1 ring-zinc-200 ring-offset-0 hover:ring-zinc-400"
+                            ? "border-black bg-black text-white"
+                            : "border-zinc-200 text-zinc-500 hover:border-black hover:text-black",
                         )}
-                        title={val}
                       >
-                        <div
-                          className="w-full h-full rounded-full border border-black/5 shadow-inner transition-transform duration-500 group-hover:scale-90"
-                          style={{ backgroundColor: getColorHex(val) }}
-                        />
+                        {val}
                       </button>
                     );
-                  }
-
-                  return (
-                    <button
-                      key={val}
-                      onClick={() => handleOptionChange(opt.name, val)}
-                      className={cn(
-                        "min-w-[48px] h-9 px-3 border text-[10px] font-black tracking-widest uppercase transition-all duration-300 rounded-[2px]",
-                        isActive
-                          ? "border-black bg-black text-white"
-                          : "border-zinc-200 text-zinc-500 hover:border-black hover:text-black"
-                      )}
-                    >
-                      {val}
-                    </button>
-                  );
-                })}
+                  })}
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
 
         {/* Quantity Selection */}
         <div className="space-y-3">
           <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">
             Số lượng
           </div>
-          
+
           <div className="flex items-center gap-4">
             <div className="inline-flex items-center h-10 border border-zinc-200 rounded-[2px] bg-zinc-50/50">
               <button
@@ -195,7 +210,7 @@ const ProductInfo = ({
             Sản phẩm đang tạm hết hàng
           </p>
         )}
-        
+
         <button
           disabled={!canAdd}
           className={cn(
@@ -210,7 +225,11 @@ const ProductInfo = ({
           }}
         >
           <span className="relative z-10">
-            {cartLoading ? "ĐANG XỬ LÝ..." : (availability ? "Thêm vào giỏ hàng" : "Hết hàng")}
+            {cartLoading
+              ? "ĐANG XỬ LÝ..."
+              : availability
+                ? "Thêm vào giỏ hàng"
+                : "Hết hàng"}
           </span>
         </button>
       </div>
@@ -222,9 +241,11 @@ const ProductInfo = ({
           <span>{formatVnd(FREE_SHIPPING_THRESHOLD)}</span>
         </div>
         <div className="h-0.5 w-full bg-zinc-100 rounded-full overflow-hidden">
-          <div 
+          <div
             className="h-full bg-[#1e2749] transition-all duration-1000 ease-out"
-            style={{ width: `${Math.min((currentTotal / FREE_SHIPPING_THRESHOLD) * 100, 100)}%` }}
+            style={{
+              width: `${Math.min((currentTotal / FREE_SHIPPING_THRESHOLD) * 100, 100)}%`,
+            }}
           />
         </div>
       </div>
@@ -236,8 +257,13 @@ const ProductInfo = ({
           { icon: "🔄", text: "Đổi trả trong vòng 30 ngày" },
           { icon: "🛡️", text: "Sản phẩm chính hãng 100%" },
         ].map((policy, i) => (
-          <div key={i} className="flex items-center gap-2.5 group translate-x-0 hover:translate-x-1 transition-transform cursor-default">
-            <span className="text-xs grayscale group-hover:grayscale-0 transition-all">{policy.icon}</span>
+          <div
+            key={i}
+            className="flex items-center gap-2.5 group translate-x-0 hover:translate-x-1 transition-transform cursor-default"
+          >
+            <span className="text-xs grayscale group-hover:grayscale-0 transition-all">
+              {policy.icon}
+            </span>
             <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest">
               {policy.text}
             </span>

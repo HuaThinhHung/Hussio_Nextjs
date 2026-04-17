@@ -1,6 +1,6 @@
 export type MoneyAmount = number;
 
-export type ProductOptionName = 'Color' | 'Size' | string;
+export type ProductOptionName = "Color" | "Size" | string;
 
 export interface StoreProductVariant {
   id: string;
@@ -26,4 +26,3 @@ export interface StoreProductDetail {
   variants: StoreProductVariant[];
   warranty?: string;
 }
-

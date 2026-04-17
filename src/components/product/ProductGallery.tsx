@@ -10,7 +10,11 @@ interface ProductGalleryProps {
   handle: string;
 }
 
-const ProductGallery = ({ images = [], title, handle }: ProductGalleryProps) => {
+const ProductGallery = ({
+  images = [],
+  title,
+  handle,
+}: ProductGalleryProps) => {
   const router = useRouter();
   const [activeImage, setActiveImage] = useState(
     images[0] || "/images/tee.webp",
