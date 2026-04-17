@@ -16,8 +16,8 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   const products = await getProducts(20);
-  const bestSellers = products.slice(0, 4);
-  const newArrivals = products.slice(0, 8);
+  const bestSellers = products.slice(0, 16);
+  const newArrivals = products.slice(0, 16);
 
   return (
     <div className="flex flex-col w-full overflow-hidden">
