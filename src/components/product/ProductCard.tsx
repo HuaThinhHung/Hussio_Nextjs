@@ -133,11 +133,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
           <div className="flex items-center gap-2 pt-1">
             {colors.slice(0, 6).map((color, index) => {
               const bgColor = getColorHex(color);
-              
+
               return (
-                <div 
-                  key={index} 
-                  className="w-4 h-4 rounded-full border border-zinc-200 shadow-sm" 
+                <div
+                  key={index}
+                  className="w-4 h-4 rounded-full border border-zinc-200 shadow-sm"
                   style={{ backgroundColor: bgColor }}
                   title={getColorDisplayName(color)}
                 />
@@ -158,69 +158,69 @@ const ProductCard = ({ product }: ProductCardProps) => {
 // Helper function to get Vietnamese color display name
 function getColorDisplayName(colorName: string): string {
   const colorNameLower = colorName.toLowerCase().trim();
-  
+
   const colorNames: Record<string, string> = {
-    'white': 'Trắng',
-    'black': 'Đen',
-    'red': 'Đỏ',
-    'blue': 'Xanh Dương',
-    'navy': 'Navy',
-    'green': 'Xanh Lục',
-    'yellow': 'Vàng',
-    'orange': 'Cam',
-    'pink': 'Hồng',
-    'purple': 'Tím',
-    'brown': 'Nâu',
-    'gray': 'Xám',
-    'grey': 'Xám',
-    'beige': 'Be',
-    'khaki': 'Kaki',
-    'cream': 'Kem',
-    'charcoal': 'Than',
-    'olive': 'Olive',
-    'burgundy': 'Đỏ Rượu',
-    'camel': 'Camel',
-    'wine': 'Rượu Vang',
-    'sky blue': 'Xanh Sky',
-    'mint': 'Mint',
-    'lavender': 'Lavender',
-    'peach': 'Đào',
-    'teal': 'Teal',
-    'tan': 'Tan',
-    'sand': 'Sand',
-    'stone': 'Stone',
-    'ash': 'Ash',
-    'denim': 'Denim',
-    'indigo': 'Indigo',
-    'forest': 'Forest',
-    'rust': 'Gỉ Sắt',
-    'terracotta': 'Terracotta',
-    'coral': 'Coral',
-    'sage': 'Sage',
-    'slate': 'Slate',
-    'ivory': 'Ngà',
-    'chocolate': 'Socola',
-    'maroon': 'Maroon',
-    'mustard': 'Mustard',
-    'cyan': 'Cyan',
-    'magenta': 'Magenta',
-    'gold': 'Vàng Gold',
-    'silver': 'Bạc',
-    'platinum': 'Platinum',
+    white: "Trắng",
+    black: "Đen",
+    red: "Đỏ",
+    blue: "Xanh Dương",
+    navy: "Navy",
+    green: "Xanh Lục",
+    yellow: "Vàng",
+    orange: "Cam",
+    pink: "Hồng",
+    purple: "Tím",
+    brown: "Nâu",
+    gray: "Xám",
+    grey: "Xám",
+    beige: "Be",
+    khaki: "Kaki",
+    cream: "Kem",
+    charcoal: "Than",
+    olive: "Olive",
+    burgundy: "Đỏ Rượu",
+    camel: "Camel",
+    wine: "Rượu Vang",
+    "sky blue": "Xanh Sky",
+    mint: "Mint",
+    lavender: "Lavender",
+    peach: "Đào",
+    teal: "Teal",
+    tan: "Tan",
+    sand: "Sand",
+    stone: "Stone",
+    ash: "Ash",
+    denim: "Denim",
+    indigo: "Indigo",
+    forest: "Forest",
+    rust: "Gỉ Sắt",
+    terracotta: "Terracotta",
+    coral: "Coral",
+    sage: "Sage",
+    slate: "Slate",
+    ivory: "Ngà",
+    chocolate: "Socola",
+    maroon: "Maroon",
+    mustard: "Mustard",
+    cyan: "Cyan",
+    magenta: "Magenta",
+    gold: "Vàng Gold",
+    silver: "Bạc",
+    platinum: "Platinum",
   };
-  
+
   // Check exact match first
   if (colorNames[colorNameLower]) {
     return colorNames[colorNameLower];
   }
-  
+
   // Check if color name contains any key
   for (const [key, value] of Object.entries(colorNames)) {
     if (colorNameLower.includes(key)) {
       return value;
     }
   }
-  
+
   // Return original if no match
   return colorName;
 }

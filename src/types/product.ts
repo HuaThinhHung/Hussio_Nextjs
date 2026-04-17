@@ -15,4 +15,3 @@ export interface StoreProduct {
   colors?: string[];
   firstVariantId?: string;
 }
-

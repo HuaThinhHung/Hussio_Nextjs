@@ -11,8 +11,8 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [activeMenu, setActiveMenu] = useState<'products' | 'collections' | null>(null);
-  const [mobileActiveSubmenu, setMobileActiveSubmenu] = useState<'products' | 'collections' | null>(null);
+  const [activeMenu, setActiveMenu] = useState<'products' | 'collections' | 'contact' | null>(null);
+  const [mobileActiveSubmenu, setMobileActiveSubmenu] = useState<'products' | 'collections' | 'contact' | null>(null);
   const [leaveTimeout, setLeaveTimeout] = useState<NodeJS.Timeout | null>(null);
   const { cart, openDrawer } = useCart();
   const cartCount = cart?.totalQuantity || 0;
@@ -130,26 +130,31 @@ const Header = () => {
             aria-label="Primary navigation"
             className="hidden md:flex items-center space-x-6 lg:space-x-8 text-[11px] font-semibold tracking-[0.16em] uppercase h-full"
           >
-            {navLinks.map((link) => (
+            {navLinks.map((link) => {
+              const hasSubmenu = link.name === "LIÊN HỆ" && link.submenu;
+              return (
               <Link
                 key={link.name}
                 href={link.href}
                 onMouseEnter={() => {
                   if (link.name === "SẢN PHẨM") setActiveMenu("products");
                   else if (link.name === "BỘ SƯU TẬP") setActiveMenu("collections");
+                  else if (link.name === "LIÊN HỆ") setActiveMenu("contact");
                   else setActiveMenu(null);
                 }}
                 className="group relative inline-flex items-center h-full px-0.5 text-black whitespace-nowrap transition-colors duration-200 hover:text-zinc-500"
               >
                 <span className={cn(
-                  "relative after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-[3px] after:bg-current after:opacity-90 after:origin-left after:scale-x-0 after:transition-transform after:duration-300 after:[transition-timing-function:cubic-bezier(0.16,1,0.3,1)] group-hover:after:scale-x-100",
-                  (activeMenu === 'products' && link.name === "SẢN PHẨM") || 
-                  (activeMenu === 'collections' && link.name === "BỘ SƯU TẬP") ? "after:scale-x-100" : ""
+                  "relative after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-[3px] after:bg-current after:opacity-90 after:origin-left after:scale-x-0 after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:after:scale-x-100",
+                  (activeMenu === 'products' && link.name === "SẢN PHẨM") ||
+                  (activeMenu === 'collections' && link.name === "BỘ SƯU TẬP") ||
+                  (activeMenu === 'contact' && link.name === "LIÊN HỆ") ? "after:scale-x-100" : ""
                 )}>
                   {link.name}
                 </span>
               </Link>
-            ))}
+            );
+          })}
           </nav>
         </div>
 
@@ -231,11 +236,11 @@ const Header = () => {
       </div>
 
       {/* Megamenu Dropdown */}
-      <div 
+      <div
         className={cn(
-          "absolute top-full left-0 w-full z-[100] bg-white border-b border-zinc-200 transition-all duration-300 ease-out",
-          activeMenu 
-            ? "opacity-100 translate-y-0 visible" 
+          "absolute top-full left-0 w-full z-100 bg-white border-b border-zinc-200 transition-all duration-300 ease-out",
+          activeMenu
+            ? "opacity-100 translate-y-0 visible"
             : "opacity-0 -translate-y-4 invisible pointer-events-none"
         )}
         onMouseEnter={() => {
@@ -254,10 +259,10 @@ const Header = () => {
       {isMobileMenuOpen && (
         <>
           <div
-            className="fixed inset-0 bg-black/50 z-[60] backdrop-blur-sm transition-opacity"
+            className="fixed inset-0 bg-black/50 z-60 backdrop-blur-sm transition-opacity"
             onClick={() => setIsMobileMenuOpen(false)}
           ></div>
-          <div className="fixed inset-y-0 left-0 w-[310px] bg-white z-[70] shadow-2xl p-8 transition-transform duration-500 ease-out animate-slide-right">
+          <div className="fixed inset-y-0 left-0 w-[310px] bg-white z-70 shadow-2xl p-8 transition-transform duration-500 ease-out animate-slide-right">
             <div className="flex justify-between items-center mb-12">
               <span className="text-2xl font-black tracking-tight">HUSSIO</span>
               <button
@@ -363,14 +368,49 @@ const Header = () => {
                 </div>
               </div>
 
-              {/* LIÊN HỆ */}
-              <Link
-                href="/contact"
-                className="flex justify-between items-center transition-all duration-300 border-b border-zinc-100 pb-4 hover:pl-2 hover:text-zinc-500"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <span>LIÊN HỆ</span>
-              </Link>
+              {/* LIÊN HỆ with Submenu */}
+              <div className="border-b border-zinc-100 pb-4">
+                <button
+                  className="flex justify-between items-center w-full hover:pl-2 hover:text-zinc-500 transition-all"
+                  onClick={() => setMobileActiveSubmenu(mobileActiveSubmenu === 'contact' ? null : 'contact')}
+                >
+                  <span>LIÊN HỆ</span>
+                  <svg
+                    className={cn(
+                      "w-4 h-4 transition-transform duration-300",
+                      mobileActiveSubmenu === 'contact' ? "rotate-180" : ""
+                    )}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <div
+                  className={cn(
+                    "overflow-hidden transition-all duration-300 ease-out",
+                    mobileActiveSubmenu === 'contact' ? "max-h-48 opacity-100 mt-4" : "max-h-0 opacity-0"
+                  )}
+                >
+                  <div className="flex flex-col space-y-3 pl-4">
+                    <Link
+                      href="/contact"
+                      className="text-zinc-500 hover:text-black transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Liên hệ
+                    </Link>
+                    <Link
+                      href="/careers"
+                      className="text-zinc-500 hover:text-black transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Tuyển dụng
+                    </Link>
+                  </div>
+                </div>
+              </div>
 
               {/* SALE 50% */}
               <Link
@@ -403,7 +443,7 @@ const Header = () => {
       )}
 
       {isSearchOpen && (
-        <div className="fixed inset-0 bg-white z-[100] p-10 flex flex-col items-center justify-start animate-fade-in shadow-2xl">
+        <div className="fixed inset-0 bg-white z-100 p-10 flex flex-col items-center justify-start animate-fade-in shadow-2xl">
           <button
             className="absolute top-10 right-10 p-2 hover:bg-zinc-100 rounded-full"
             onClick={() => setIsSearchOpen(false)}

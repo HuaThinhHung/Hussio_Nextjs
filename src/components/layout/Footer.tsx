@@ -148,10 +148,16 @@ const Footer = () => {
                 Chính sách bảo mật
               </Link>
               <Link
-                href="/pages/lien-he"
+                href="/contact"
                 className="text-zinc-400 hover:text-white transition-colors"
               >
                 Liên hệ chúng tôi
+              </Link>
+              <Link
+                href="/careers"
+                className="text-zinc-400 hover:text-white transition-colors"
+              >
+                Tuyển dụng
               </Link>
             </nav>
           </div>

@@ -25,7 +25,10 @@ export const siteConfig = {
     { name: "NEW-IN", href: "/new-in" },
     { name: "SẢN PHẨM", href: "/products" },
     { name: "BỘ SƯU TẬP", href: "/collections" },
-    { name: "LIÊN HỆ", href: "/contact" },
+    { name: "LIÊN HỆ", href: "/contact", submenu: [
+      { name: "Liên hệ", href: "/contact" },
+      { name: "Tuyển dụng", href: "/careers" },
+    ]},
     { name: "SALE 50%", href: "/sale" },
   ],
   trustBadges: [
@@ -76,5 +79,10 @@ export const seoConfig = {
     title: "Đăng ký | HUSSIO",
     description:
       "Tạo tài khoản HUSSIO để mua sắm nhanh hơn và theo dõi đơn hàng.",
+  },
+  careers: {
+    title: "Tuyển dụng | HUSSIO - Thời trang công sở nam",
+    description:
+      "Tham gia đội ngũ HUSSIO - thương hiệu thời trang nam hàng đầu. Khám phá các vị trí tuyển dụng trong kinh doanh, marketing và sáng tạo.",
   },
 } as const;
