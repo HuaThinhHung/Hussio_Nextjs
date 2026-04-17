@@ -134,9 +134,10 @@ const Header = () => {
               <Link
                 key={link.name}
                 href={link.href}
-                onMouseOver={() => {
+                onMouseEnter={() => {
                   if (link.name === "SẢN PHẨM") setActiveMenu("products");
                   else if (link.name === "BỘ SƯU TẬP") setActiveMenu("collections");
+                  else setActiveMenu(null);
                 }}
                 className="group relative inline-flex items-center h-full px-0.5 text-black whitespace-nowrap transition-colors duration-200 hover:text-zinc-500"
               >
@@ -237,8 +238,12 @@ const Header = () => {
             ? "opacity-100 translate-y-0 visible" 
             : "opacity-0 -translate-y-4 invisible pointer-events-none"
         )}
-        onMouseOver={() => {
+        onMouseEnter={() => {
           if (leaveTimeout) clearTimeout(leaveTimeout);
+        }}
+        onMouseLeave={() => {
+          const timeout = setTimeout(() => setActiveMenu(null), 100);
+          setLeaveTimeout(timeout);
         }}
       >
         <div className="container mx-auto">
