@@ -7,13 +7,14 @@
   --color-muted: #f6f6f6;
   --color-line: #e8e8e8;
 
-  /* Fonts */
-  --font-sans: var(--font-roboto), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-mono), ui-monospaced, monospace;
+  /* Fonts - Be Vietnam Pro */
+  --font-sans: var(--font-be-vietnam-pro), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospaced, monospace;
 
   /* Animations */
   --animate-marquee: marquee 40s linear infinite;
   --animate-fade-in: fadeIn 0.8s ease-out forwards;
+  --animate-fade-in-up: fadeInUp 0.4s ease-out forwards;
   --animate-slide-right: slideRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   --animate-pulse-subtle: pulse-subtle 2s ease-in-out infinite;
 
@@ -24,6 +25,10 @@
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px) scale(0.9); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
   }
   @keyframes slideRight {
     from { transform: translateX(-100%); }
@@ -46,11 +51,50 @@
     color: var(--color-foreground);
     @apply antialiased;
     font-family: var(--font-sans);
+    font-weight: 400;
     font-feature-settings: "ss01", "ss02";
   }
 
+  /* Heading styles - Clean, modern, professional */
   h1, h2, h3, h4, h5, h6 {
-    @apply tracking-tight uppercase font-extrabold;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+    color: var(--color-foreground);
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl;
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  h4 {
+    @apply text-xl md:text-2xl;
+    font-weight: 500;
+  }
+
+  h5 {
+    @apply text-lg md:text-xl;
+    font-weight: 500;
+  }
+
+  h6 {
+    @apply text-base md:text-lg;
+    font-weight: 500;
   }
 
   a, button {

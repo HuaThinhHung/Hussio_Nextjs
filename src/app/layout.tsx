@@ -16,52 +16,9 @@ import Toast from "@/components/common/Toast";
 // Prevent FOUC with FontAwesome
 config.autoAddCss = false;
 
-// Montserrat - Heading font (Bold, SemiBold, Medium, Regular)
-const montserrat = localFont({
-  src: [
-    {
-      path: "../../public/font/Montserrat/static/Montserrat-Regular.ttf",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../../public/font/Montserrat/static/Montserrat-Medium.ttf",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "../../public/font/Montserrat/static/Montserrat-SemiBold.ttf",
-      weight: "600",
-      style: "normal",
-    },
-    {
-      path: "../../public/font/Montserrat/static/Montserrat-Bold.ttf",
-      weight: "700",
-      style: "normal",
-    },
-    {
-      path: "../../public/font/Montserrat/static/Montserrat-ExtraBold.ttf",
-      weight: "800",
-      style: "normal",
-    },
-    {
-      path: "../../public/font/Montserrat/static/Montserrat-Black.ttf",
-      weight: "900",
-      style: "normal",
-    },
-  ],
-  variable: "--font-heading",
-  fallback: ["system-ui", "sans-serif"],
-});
-
-// Be Vietnam Pro - Body font (Light, Regular, Medium, SemiBold, Bold)
+// Be Vietnam Pro - Main font for both body and headings
 const beVietnamPro = localFont({
   src: [
-    {
-      path: "../../public/font/Be_Vietnam_Pro/BeVietnamPro-Light.ttf",
-      weight: "300",
-      style: "normal",
-    },
     {
       path: "../../public/font/Be_Vietnam_Pro/BeVietnamPro-Regular.ttf",
       weight: "400",
@@ -82,18 +39,8 @@ const beVietnamPro = localFont({
       weight: "700",
       style: "normal",
     },
-    {
-      path: "../../public/font/Be_Vietnam_Pro/BeVietnamPro-ExtraBold.ttf",
-      weight: "800",
-      style: "normal",
-    },
-    {
-      path: "../../public/font/Be_Vietnam_Pro/BeVietnamPro-Black.ttf",
-      weight: "900",
-      style: "normal",
-    },
   ],
-  variable: "--font-body",
+  variable: "--font-be-vietnam-pro",
   fallback: ["system-ui", "sans-serif"],
 });
 
@@ -113,9 +60,9 @@ export default function RootLayout({
   return (
     <html
       lang="vi"
-      className={`${montserrat.variable} ${beVietnamPro.variable} antialiased`}
+      className={`${beVietnamPro.variable} antialiased`}
     >
-      <body className="min-h-screen bg-white text-black selection:bg-black selection:text-white">
+      <body className="min-h-screen bg-white text-black selection:bg-black selection:text-white font-be-vietnam-pro">
         <CartProvider>
           <AnnouncementBar />
           <Header />
