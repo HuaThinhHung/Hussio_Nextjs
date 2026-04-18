@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils";
 import type { StoreProduct } from "@/types/product";
 import { useCart } from "@/hooks/useCart";
 import { getColorHex } from "@/lib/product-utils";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 
 interface ProductCardProps {
   product: StoreProduct;
@@ -84,19 +86,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
               }
             }}
           >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-              />
-            </svg>
+            <FontAwesomeIcon icon={faShoppingCart} className="w-4 h-4" />
           </button>
         )}
       </Link>

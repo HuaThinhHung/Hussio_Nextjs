@@ -4,7 +4,9 @@ import { seoConfig, siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
   title: seoConfig.careers?.title || "Tuyển dụng | HUSSIO",
-  description: seoConfig.careers?.description || "Tham gia HUSSIO - nơi phát triển sự nghiệp thời trang. Khám phá các vị trí tuyển dụng hiện tại.",
+  description:
+    seoConfig.careers?.description ||
+    "Tham gia HUSSIO - nơi phát triển sự nghiệp thời trang. Khám phá các vị trí tuyển dụng hiện tại.",
 };
 
 const jobOpenings = [
@@ -13,7 +15,8 @@ const jobOpenings = [
     department: "Ecommerce",
     type: "Full-time",
     location: "TP. Hồ Chí Minh",
-    pdfUrl: "https://drive.google.com/file/d/1-ZXZjpWR42-kSUD5jzTGLA78wA2atqvS/view",
+    pdfUrl:
+      "https://drive.google.com/file/d/1-ZXZjpWR42-kSUD5jzTGLA78wA2atqvS/view",
     requirements: [
       "Có ít nhất 2 năm kinh nghiệm thực chiến trên Shopee và TikTok Shop (ưu tiên ứng viên đã quản lý gian hàng doanh thu >1,5 tỷ/tháng)",
       "Đã từng quản lý đội nhóm >3 người",
@@ -43,7 +46,8 @@ const jobOpenings = [
     department: "Marketing",
     type: "Full-time",
     location: "TP. Hồ Chí Minh",
-    pdfUrl: "https://docs.google.com/document/d/14oGuvsACsI66zZTm-b-Rf_ylt4I4IBFLZra8bnJLMWg/edit?tab=t.0",
+    pdfUrl:
+      "https://docs.google.com/document/d/14oGuvsACsI66zZTm-b-Rf_ylt4I4IBFLZra8bnJLMWg/edit?tab=t.0",
     requirements: [
       "Từ 2 năm kinh nghiệm trong ngành thời trang, phụ kiện cao cấp",
       "Có kinh nghiệm phụ trách thương hiệu từ giai đoạn đầu hoặc từng tái thiết thương hiệu cũ",
@@ -74,7 +78,8 @@ const jobOpenings = [
     department: "Creative",
     type: "Full-time",
     location: "TP. Hồ Chí Minh",
-    pdfUrl: "https://docs.google.com/document/d/113iURkZ6Y6GYBoEHNIkGlyGytlyiVJB7/edit?usp=drive_link&ouid=111743505999763634593&rtpof=true&sd=true",
+    pdfUrl:
+      "https://docs.google.com/document/d/113iURkZ6Y6GYBoEHNIkGlyGytlyiVJB7/edit?usp=drive_link&ouid=111743505999763634593&rtpof=true&sd=true",
     requirements: [
       "Ứng viên nam, độ tuổi từ 20 - 25 tuổi",
       "Có kinh nghiệm ít nhất 1 năm sử dụng thành thạo các phần mềm thiết kế như Photoshop, Illustrator (AI)",
@@ -103,7 +108,8 @@ const jobOpenings = [
     department: "Kế toán",
     type: "Full-time",
     location: "TP. Hồ Chí Minh",
-    pdfUrl: "https://docs.google.com/document/d/1L9lZXlzjwcLp4wUVaY9A_lLT42QhdWvtd4sP4i9BPgU/edit?usp=sharing",
+    pdfUrl:
+      "https://docs.google.com/document/d/1L9lZXlzjwcLp4wUVaY9A_lLT42QhdWvtd4sP4i9BPgU/edit?usp=sharing",
     requirements: [
       "Tốt nghiệp ngành kế toán – tài chính, có tối thiểu 2 năm kinh nghiệm làm kế toán nội bộ trong công ty bán lẻ/thương mại điện tử",
       "Thành thạo Excel và phần mềm kế toán. Biết sử dụng phần mềm quản lý bán hàng (như Sapo, KiotViet,...) là lợi thế lớn",
@@ -178,11 +184,14 @@ export default function CareersPage() {
               HUSSIO Careers
             </span>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight uppercase leading-tight">
-              Cùng HUSSIO<br />xây dựng tương lai
+              Cùng HUSSIO
+              <br />
+              xây dựng tương lai
             </h1>
             <p className="mt-6 text-base md:text-lg text-zinc-300 max-w-xl leading-relaxed">
-              Thương hiệu thời trang nam hàng đầu Việt Nam đang tìm kiếm những ứng viên tài năng.
-              Hãy trở thành một phần của đội ngũ HUSSIO và phát triển sự nghiệp cùng chúng tôi.
+              Thương hiệu thời trang nam hàng đầu Việt Nam đang tìm kiếm những
+              ứng viên tài năng. Hãy trở thành một phần của đội ngũ HUSSIO và
+              phát triển sự nghiệp cùng chúng tôi.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <a
@@ -291,8 +300,12 @@ export default function CareersPage() {
                     <ul className="space-y-2">
                       {job.requirements.map((req, i) => (
                         <li key={i} className="flex items-start gap-2 text-sm">
-                          <span className="text-[10px] text-zinc-400 mt-1">▸</span>
-                          <span className="text-zinc-700 leading-relaxed">{req}</span>
+                          <span className="text-[10px] text-zinc-400 mt-1">
+                            ▸
+                          </span>
+                          <span className="text-zinc-700 leading-relaxed">
+                            {req}
+                          </span>
                         </li>
                       ))}
                     </ul>
@@ -306,8 +319,12 @@ export default function CareersPage() {
                     <ul className="space-y-2">
                       {job.responsibilities.map((resp, i) => (
                         <li key={i} className="flex items-start gap-2 text-sm">
-                          <span className="text-[10px] text-zinc-400 mt-1">▸</span>
-                          <span className="text-zinc-700 leading-relaxed">{resp}</span>
+                          <span className="text-[10px] text-zinc-400 mt-1">
+                            ▸
+                          </span>
+                          <span className="text-zinc-700 leading-relaxed">
+                            {resp}
+                          </span>
                         </li>
                       ))}
                     </ul>
@@ -321,8 +338,12 @@ export default function CareersPage() {
                     <ul className="space-y-2">
                       {job.benefits.map((benefit, i) => (
                         <li key={i} className="flex items-start gap-2 text-sm">
-                          <span className="text-[10px] text-green-600 mt-1">✓</span>
-                          <span className="text-zinc-700 leading-relaxed">{benefit}</span>
+                          <span className="text-[10px] text-green-600 mt-1">
+                            ✓
+                          </span>
+                          <span className="text-zinc-700 leading-relaxed">
+                            {benefit}
+                          </span>
                         </li>
                       ))}
                     </ul>
@@ -338,7 +359,8 @@ export default function CareersPage() {
               Không tìm thấy vị trí phù hợp?
             </h3>
             <p className="text-sm text-zinc-600 mb-6 max-w-lg mx-auto">
-              Hãy gửi CV của bạn cho chúng tôi. Chúng tôi sẽ lưu trữ và liên hệ khi có vị trí phù hợp.
+              Hãy gửi CV của bạn cho chúng tôi. Chúng tôi sẽ lưu trữ và liên hệ
+              khi có vị trí phù hợp.
             </p>
             <a
               href="mailto:recruitment@hussio.vn"
@@ -364,13 +386,25 @@ export default function CareersPage() {
               href="mailto:recruitment@hussio.vn"
               className="flex items-center gap-2 hover:text-zinc-300 transition-colors"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                />
               </svg>
               recruitment@hussio.vn
             </a>
             <span className="hidden md:inline text-zinc-600">|</span>
-            <span className="text-zinc-400">Hotline tuyển dụng: 087.774.7777 (ext. 102)</span>
+            <span className="text-zinc-400">
+              Hotline tuyển dụng: 087.774.7777 (ext. 102)
+            </span>
           </div>
         </div>
       </section>

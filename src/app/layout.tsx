@@ -1,89 +1,100 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { config } from "@fortawesome/fontawesome-svg-core";
+import "@fortawesome/fontawesome-svg-core/styles.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import AnnouncementBar from "@/components/layout/AnnouncementBar";
 import BackToTopButton from "@/components/common/BackToTopButton";
+import FloatingChatButton from "@/components/common/FloatingChatButton";
 import { seoConfig, siteConfig } from "@/config/site";
 import { CartProvider } from "@/context/CartContext";
 import CartDrawer from "@/components/cart/CartDrawer";
 import Toast from "@/components/common/Toast";
 
-const roboto = localFont({
+// Prevent FOUC with FontAwesome
+config.autoAddCss = false;
+
+// Montserrat - Heading font (Bold, SemiBold, Medium, Regular)
+const montserrat = localFont({
   src: [
     {
-      path: "../../public/font/Roboto/static/Roboto-Light.ttf",
-      weight: "300",
-      style: "normal",
-    },
-    {
-      path: "../../public/font/Roboto/static/Roboto-LightItalic.ttf",
-      weight: "300",
-      style: "italic",
-    },
-    {
-      path: "../../public/font/Roboto/static/Roboto-Regular.ttf",
+      path: "../../public/font/Montserrat/static/Montserrat-Regular.ttf",
       weight: "400",
       style: "normal",
     },
     {
-      path: "../../public/font/Roboto/static/Roboto-Italic.ttf",
-      weight: "400",
-      style: "italic",
-    },
-    {
-      path: "../../public/font/Roboto/static/Roboto-Medium.ttf",
+      path: "../../public/font/Montserrat/static/Montserrat-Medium.ttf",
       weight: "500",
       style: "normal",
     },
     {
-      path: "../../public/font/Roboto/static/Roboto-MediumItalic.ttf",
-      weight: "500",
-      style: "italic",
-    },
-    {
-      path: "../../public/font/Roboto/static/Roboto-SemiBold.ttf",
+      path: "../../public/font/Montserrat/static/Montserrat-SemiBold.ttf",
       weight: "600",
       style: "normal",
     },
     {
-      path: "../../public/font/Roboto/static/Roboto-SemiBoldItalic.ttf",
-      weight: "600",
-      style: "italic",
-    },
-    {
-      path: "../../public/font/Roboto/static/Roboto-Bold.ttf",
+      path: "../../public/font/Montserrat/static/Montserrat-Bold.ttf",
       weight: "700",
       style: "normal",
     },
     {
-      path: "../../public/font/Roboto/static/Roboto-BoldItalic.ttf",
-      weight: "700",
-      style: "italic",
-    },
-    {
-      path: "../../public/font/Roboto/static/Roboto-ExtraBold.ttf",
+      path: "../../public/font/Montserrat/static/Montserrat-ExtraBold.ttf",
       weight: "800",
       style: "normal",
     },
     {
-      path: "../../public/font/Roboto/static/Roboto-ExtraBoldItalic.ttf",
-      weight: "800",
-      style: "italic",
-    },
-    {
-      path: "../../public/font/Roboto/static/Roboto-Black.ttf",
+      path: "../../public/font/Montserrat/static/Montserrat-Black.ttf",
       weight: "900",
       style: "normal",
-    },
-    {
-      path: "../../public/font/Roboto/static/Roboto-BlackItalic.ttf",
-      weight: "900",
-      style: "italic",
     },
   ],
-  variable: "--font-roboto",
+  variable: "--font-heading",
+  fallback: ["system-ui", "sans-serif"],
+});
+
+// Be Vietnam Pro - Body font (Light, Regular, Medium, SemiBold, Bold)
+const beVietnamPro = localFont({
+  src: [
+    {
+      path: "../../public/font/Be_Vietnam_Pro/BeVietnamPro-Light.ttf",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../../public/font/Be_Vietnam_Pro/BeVietnamPro-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/font/Be_Vietnam_Pro/BeVietnamPro-Medium.ttf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../../public/font/Be_Vietnam_Pro/BeVietnamPro-SemiBold.ttf",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "../../public/font/Be_Vietnam_Pro/BeVietnamPro-Bold.ttf",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../../public/font/Be_Vietnam_Pro/BeVietnamPro-ExtraBold.ttf",
+      weight: "800",
+      style: "normal",
+    },
+    {
+      path: "../../public/font/Be_Vietnam_Pro/BeVietnamPro-Black.ttf",
+      weight: "900",
+      style: "normal",
+    },
+  ],
+  variable: "--font-body",
+  fallback: ["system-ui", "sans-serif"],
 });
 
 export const metadata: Metadata = {
@@ -102,7 +113,7 @@ export default function RootLayout({
   return (
     <html
       lang="vi"
-      className={`${roboto.variable} antialiased`}
+      className={`${montserrat.variable} ${beVietnamPro.variable} antialiased`}
     >
       <body className="min-h-screen bg-white text-black selection:bg-black selection:text-white">
         <CartProvider>
@@ -112,7 +123,11 @@ export default function RootLayout({
           <Footer />
           <CartDrawer />
           <Toast />
-          <BackToTopButton />
+          {/* Floating buttons container - FCB trên, B2T dưới */}
+          <div className="fixed bottom-6 right-4 z-100 flex flex-col items-end gap-3">
+            <FloatingChatButton />
+            <BackToTopButton />
+          </div>
         </CartProvider>
       </body>
     </html>

@@ -2,6 +2,13 @@
 
 import React from "react";
 import Link from "next/link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faFacebook,
+  faInstagram,
+  faTiktok,
+  faYoutube,
+} from "@fortawesome/free-brands-svg-icons";
 import { siteConfig } from "@/config/site";
 
 const Footer = () => {
@@ -162,8 +169,9 @@ const Footer = () => {
             </nav>
           </div>
 
-          {/* Column 4: Connect */}
+          {/* Column 4: Connect & CSKH */}
           <div className="lg:col-span-3 space-y-8">
+            {/* Social Media */}
             <div className="space-y-6">
               <h3 className="text-[11px] font-black uppercase tracking-[0.25em] text-white/50">
                 Theo dõi chúng tôi
@@ -173,99 +181,37 @@ const Footer = () => {
                 <Link
                   href={siteConfig.social.facebook}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 hover:bg-white hover:text-black transition-all duration-300"
                 >
-                  <svg
-                    className="w-5 h-5"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M22 12a10 10 0 1 0-11.56 9.87v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.88 3.77-3.88 1.09 0 2.23.2 2.23.2v2.46h-1.25c-1.24 0-1.62.77-1.62 1.56V12h2.76l-.44 2.88h-2.32v6.99A10 10 0 0 0 22 12z" />
-                  </svg>
+                  <FontAwesomeIcon icon={faFacebook} className="w-5 h-5" />
                 </Link>
                 {/* Instagram */}
                 <Link
                   href={siteConfig.social.instagram}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 hover:bg-white hover:text-black transition-all duration-300"
                 >
-                  <svg
-                    className="w-5 h-5"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                  </svg>
+                  <FontAwesomeIcon icon={faInstagram} className="w-5 h-5" />
                 </Link>
                 {/* TikTok */}
                 <Link
                   href={siteConfig.social.tiktok}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 hover:bg-white hover:text-black transition-all duration-300"
                 >
-                  <svg
-                    className="w-5 h-5"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-3.3 2.97-6.07 6.26-6.02 1.13.01 2.24.34 3.18.96.02-1.28 0-2.57.01-3.85-1-.53-2.15-.79-3.3-.81-1.92-.09-3.82.72-5.18 2.08-1.36 1.36-2.17 3.27-2.08 5.18.09 1.93.9 3.83 2.26 5.19 1.36 1.37 3.27 2.17 5.18 2.08 1.92-.09 3.82-.72 5.18-2.08 1.15-1.16 1.91-2.67 2.1-4.28.18-1.5-.15-3.03-.92-4.36z" />
-                  </svg>
-                </Link>
-                {/* Zalo */}
-                <Link
-                  href={siteConfig.social.zalo}
-                  target="_blank"
-                  className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 hover:bg-[#0068ff] hover:border-[#0068ff] transition-all duration-300"
-                >
-                  <span className="text-[10px] font-black">Zalo</span>
-                </Link>
-                {/* Threads */}
-                <Link
-                  href={siteConfig.social.threads}
-                  target="_blank"
-                  className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 hover:bg-white hover:text-black transition-all duration-300"
-                >
-                  <svg
-                    className="w-5 h-5"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M12 24C5.373 24 0 18.627 0 12S5.373 0 12 0s12 5.373 12 12-5.373 12-12 12zm0-2c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm0-15c-2.761 0-5 2.239-5 5s2.239 5 5 5 5-2.239 5-5-2.239-5-5-5zm0 2c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3z" />
-                  </svg>
+                  <FontAwesomeIcon icon={faTiktok} className="w-5 h-5" />
                 </Link>
                 {/* YouTube */}
                 <Link
                   href={siteConfig.social.youtube}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 hover:bg-red-600 hover:border-red-600 transition-all duration-300"
                 >
-                  <svg
-                    className="w-5 h-5"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-                  </svg>
-                </Link>
-                {/* Shopee */}
-                <Link
-                  href={siteConfig.social.shopee}
-                  target="_blank"
-                  className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 hover:bg-[#ee4d2d] hover:border-[#ee4d2d] transition-all duration-300"
-                >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="1.7"
-                      d="M7 9V7a5 5 0 0 1 10 0v2M6 9h12l1 12H5L6 9z"
-                    />
-                  </svg>
+                  <FontAwesomeIcon icon={faYoutube} className="w-5 h-5" />
                 </Link>
               </div>
             </div>

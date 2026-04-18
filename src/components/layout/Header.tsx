@@ -11,8 +11,12 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [activeMenu, setActiveMenu] = useState<'products' | 'collections' | 'contact' | null>(null);
-  const [mobileActiveSubmenu, setMobileActiveSubmenu] = useState<'products' | 'collections' | 'contact' | null>(null);
+  const [activeMenu, setActiveMenu] = useState<
+    "products" | "collections" | "contact" | null
+  >(null);
+  const [mobileActiveSubmenu, setMobileActiveSubmenu] = useState<
+    "products" | "collections" | "contact" | null
+  >(null);
   const [leaveTimeout, setLeaveTimeout] = useState<NodeJS.Timeout | null>(null);
   const { cart, openDrawer } = useCart();
   const cartCount = cart?.totalQuantity || 0;
@@ -29,29 +33,32 @@ const Header = () => {
   useEffect(() => {
     if (isMobileMenuOpen) {
       const scrollY = window.scrollY;
-      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-      
+      const scrollbarWidth =
+        window.innerWidth - document.documentElement.clientWidth;
+
       document.body.style.overflow = "hidden";
       document.body.style.position = "fixed";
       document.body.style.top = "0";
       document.body.style.left = "0";
       document.body.style.right = "0";
       document.body.style.bottom = "0";
-      document.body.style.paddingRight = scrollbarWidth > 0 ? `${scrollbarWidth}px` : "0";
+      document.body.style.paddingRight =
+        scrollbarWidth > 0 ? `${scrollbarWidth}px` : "0";
       document.body.style.width = "100vw";
       document.body.style.height = "100vh";
       document.body.style.overflow = "hidden";
       document.body.style.overscrollBehavior = "none";
       document.body.style.touchAction = "none";
-      
+
       document.documentElement.style.scrollBehavior = "auto";
-      
+
       requestAnimationFrame(() => {
         document.body.style.height = `${scrollY + window.innerHeight}px`;
       });
     } else {
-      const scrollY = parseInt(document.body.style.height || "0") - window.innerHeight;
-      
+      const scrollY =
+        parseInt(document.body.style.height || "0") - window.innerHeight;
+
       document.body.style.overflow = "";
       document.body.style.position = "";
       document.body.style.top = "";
@@ -63,14 +70,14 @@ const Header = () => {
       document.body.style.height = "";
       document.body.style.overscrollBehavior = "";
       document.body.style.touchAction = "";
-      
+
       document.documentElement.style.scrollBehavior = "";
-      
+
       requestAnimationFrame(() => {
         window.scrollTo(0, Math.max(0, scrollY));
       });
     }
-    
+
     return () => {
       document.body.style.overflow = "";
       document.body.style.position = "";
@@ -96,7 +103,7 @@ const Header = () => {
         isScrolled
           ? "bg-white/95 backdrop-blur-md border-zinc-200 h-16"
           : "bg-white border-zinc-100 h-[72px]",
-        activeMenu && "bg-white border-zinc-200"
+        activeMenu && "bg-white border-zinc-200",
       )}
       onMouseLeave={() => {
         const timeout = setTimeout(() => setActiveMenu(null), 100);
@@ -133,28 +140,34 @@ const Header = () => {
             {navLinks.map((link) => {
               const hasSubmenu = link.name === "LIÊN HỆ" && link.submenu;
               return (
-              <Link
-                key={link.name}
-                href={link.href}
-                onMouseEnter={() => {
-                  if (link.name === "SẢN PHẨM") setActiveMenu("products");
-                  else if (link.name === "BỘ SƯU TẬP") setActiveMenu("collections");
-                  else if (link.name === "LIÊN HỆ") setActiveMenu("contact");
-                  else setActiveMenu(null);
-                }}
-                className="group relative inline-flex items-center h-full px-0.5 text-black whitespace-nowrap transition-colors duration-200 hover:text-zinc-500"
-              >
-                <span className={cn(
-                  "relative after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-[3px] after:bg-current after:opacity-90 after:origin-left after:scale-x-0 after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:after:scale-x-100",
-                  (activeMenu === 'products' && link.name === "SẢN PHẨM") ||
-                  (activeMenu === 'collections' && link.name === "BỘ SƯU TẬP") ||
-                  (activeMenu === 'contact' && link.name === "LIÊN HỆ") ? "after:scale-x-100" : ""
-                )}>
-                  {link.name}
-                </span>
-              </Link>
-            );
-          })}
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  onMouseEnter={() => {
+                    if (link.name === "SẢN PHẨM") setActiveMenu("products");
+                    else if (link.name === "BỘ SƯU TẬP")
+                      setActiveMenu("collections");
+                    else if (link.name === "LIÊN HỆ") setActiveMenu("contact");
+                    else setActiveMenu(null);
+                  }}
+                  className="group relative inline-flex items-center h-full px-0.5 text-black whitespace-nowrap transition-colors duration-200 hover:text-zinc-500"
+                >
+                  <span
+                    className={cn(
+                      "relative after:content-[''] after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-[3px] after:bg-current after:opacity-90 after:origin-left after:scale-x-0 after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:after:scale-x-100",
+                      (activeMenu === "products" && link.name === "SẢN PHẨM") ||
+                        (activeMenu === "collections" &&
+                          link.name === "BỘ SƯU TẬP") ||
+                        (activeMenu === "contact" && link.name === "LIÊN HỆ")
+                        ? "after:scale-x-100"
+                        : "",
+                    )}
+                  >
+                    {link.name}
+                  </span>
+                </Link>
+              );
+            })}
           </nav>
         </div>
 
@@ -241,7 +254,7 @@ const Header = () => {
           "absolute top-full left-0 w-full z-100 bg-white border-b border-zinc-200 transition-all duration-300 ease-out",
           activeMenu
             ? "opacity-100 translate-y-0 visible"
-            : "opacity-0 -translate-y-4 invisible pointer-events-none"
+            : "opacity-0 -translate-y-4 invisible pointer-events-none",
         )}
         onMouseEnter={() => {
           if (leaveTimeout) clearTimeout(leaveTimeout);
@@ -252,7 +265,7 @@ const Header = () => {
         }}
       >
         <div className="container mx-auto">
-           {activeMenu && <Megamenu type={activeMenu} />}
+          {activeMenu && <Megamenu type={activeMenu} />}
         </div>
       </div>
 
@@ -301,35 +314,81 @@ const Header = () => {
               <div className="border-b border-zinc-100 pb-4">
                 <button
                   className="flex justify-between items-center w-full hover:pl-2 hover:text-zinc-500 transition-all"
-                  onClick={() => setMobileActiveSubmenu(mobileActiveSubmenu === 'products' ? null : 'products')}
+                  onClick={() =>
+                    setMobileActiveSubmenu(
+                      mobileActiveSubmenu === "products" ? null : "products",
+                    )
+                  }
                 >
                   <span>SẢN PHẨM</span>
                   <svg
                     className={cn(
                       "w-4 h-4 transition-transform duration-300",
-                      mobileActiveSubmenu === 'products' ? "rotate-180" : ""
+                      mobileActiveSubmenu === "products" ? "rotate-180" : "",
                     )}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </button>
                 <div
                   className={cn(
                     "overflow-hidden transition-all duration-300 ease-out",
-                    mobileActiveSubmenu === 'products' ? "max-h-48 opacity-100 mt-4" : "max-h-0 opacity-0"
+                    mobileActiveSubmenu === "products"
+                      ? "max-h-48 opacity-100 mt-4"
+                      : "max-h-0 opacity-0",
                   )}
                 >
                   <div className="flex flex-col space-y-3 pl-4">
-                    <Link href="/products" className="text-zinc-500 hover:text-black transition-colors">Áo Polo</Link>
-                    <Link href="/products" className="text-zinc-500 hover:text-black transition-colors">Áo Thun (Tee)</Link>
-                    <Link href="/products" className="text-zinc-500 hover:text-black transition-colors">Áo Sơ mi</Link>
-                    <Link href="/products" className="text-zinc-500 hover:text-black transition-colors">Áo Khoác (Jacket)</Link>
-                    <Link href="/products" className="text-zinc-500 hover:text-black transition-colors">Quần Kaki</Link>
-                    <Link href="/products" className="text-zinc-500 hover:text-black transition-colors">Quần Tây</Link>
-                    <Link href="/products" className="text-zinc-500 hover:text-black transition-colors">Phụ Kiện</Link>
+                    <Link
+                      href="/products"
+                      className="text-zinc-500 hover:text-black transition-colors"
+                    >
+                      Áo Polo
+                    </Link>
+                    <Link
+                      href="/products"
+                      className="text-zinc-500 hover:text-black transition-colors"
+                    >
+                      Áo Thun (Tee)
+                    </Link>
+                    <Link
+                      href="/products"
+                      className="text-zinc-500 hover:text-black transition-colors"
+                    >
+                      Áo Sơ mi
+                    </Link>
+                    <Link
+                      href="/products"
+                      className="text-zinc-500 hover:text-black transition-colors"
+                    >
+                      Áo Khoác (Jacket)
+                    </Link>
+                    <Link
+                      href="/products"
+                      className="text-zinc-500 hover:text-black transition-colors"
+                    >
+                      Quần Kaki
+                    </Link>
+                    <Link
+                      href="/products"
+                      className="text-zinc-500 hover:text-black transition-colors"
+                    >
+                      Quần Tây
+                    </Link>
+                    <Link
+                      href="/products"
+                      className="text-zinc-500 hover:text-black transition-colors"
+                    >
+                      Phụ Kiện
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -338,32 +397,65 @@ const Header = () => {
               <div className="border-b border-zinc-100 pb-4">
                 <button
                   className="flex justify-between items-center w-full hover:pl-2 hover:text-zinc-500 transition-all"
-                  onClick={() => setMobileActiveSubmenu(mobileActiveSubmenu === 'collections' ? null : 'collections')}
+                  onClick={() =>
+                    setMobileActiveSubmenu(
+                      mobileActiveSubmenu === "collections"
+                        ? null
+                        : "collections",
+                    )
+                  }
                 >
                   <span>BỘ SƯU TẬP</span>
                   <svg
                     className={cn(
                       "w-4 h-4 transition-transform duration-300",
-                      mobileActiveSubmenu === 'collections' ? "rotate-180" : ""
+                      mobileActiveSubmenu === "collections" ? "rotate-180" : "",
                     )}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </button>
                 <div
                   className={cn(
                     "overflow-hidden transition-all duration-300 ease-out",
-                    mobileActiveSubmenu === 'collections' ? "max-h-48 opacity-100 mt-4" : "max-h-0 opacity-0"
+                    mobileActiveSubmenu === "collections"
+                      ? "max-h-48 opacity-100 mt-4"
+                      : "max-h-0 opacity-0",
                   )}
                 >
                   <div className="flex flex-col space-y-3 pl-4">
-                    <Link href="/collections" className="text-zinc-500 hover:text-black transition-colors">Quiet Strength</Link>
-                    <Link href="/collections" className="text-zinc-500 hover:text-black transition-colors">Modern Black</Link>
-                    <Link href="/collections" className="text-zinc-500 hover:text-black transition-colors">Summer Essentials</Link>
-                    <Link href="/collections" className="text-zinc-500 hover:text-black transition-colors">Hussio Classic</Link>
+                    <Link
+                      href="/collections"
+                      className="text-zinc-500 hover:text-black transition-colors"
+                    >
+                      Quiet Strength
+                    </Link>
+                    <Link
+                      href="/collections"
+                      className="text-zinc-500 hover:text-black transition-colors"
+                    >
+                      Modern Black
+                    </Link>
+                    <Link
+                      href="/collections"
+                      className="text-zinc-500 hover:text-black transition-colors"
+                    >
+                      Summer Essentials
+                    </Link>
+                    <Link
+                      href="/collections"
+                      className="text-zinc-500 hover:text-black transition-colors"
+                    >
+                      Hussio Classic
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -372,25 +464,36 @@ const Header = () => {
               <div className="border-b border-zinc-100 pb-4">
                 <button
                   className="flex justify-between items-center w-full hover:pl-2 hover:text-zinc-500 transition-all"
-                  onClick={() => setMobileActiveSubmenu(mobileActiveSubmenu === 'contact' ? null : 'contact')}
+                  onClick={() =>
+                    setMobileActiveSubmenu(
+                      mobileActiveSubmenu === "contact" ? null : "contact",
+                    )
+                  }
                 >
                   <span>LIÊN HỆ</span>
                   <svg
                     className={cn(
                       "w-4 h-4 transition-transform duration-300",
-                      mobileActiveSubmenu === 'contact' ? "rotate-180" : ""
+                      mobileActiveSubmenu === "contact" ? "rotate-180" : "",
                     )}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </button>
                 <div
                   className={cn(
                     "overflow-hidden transition-all duration-300 ease-out",
-                    mobileActiveSubmenu === 'contact' ? "max-h-48 opacity-100 mt-4" : "max-h-0 opacity-0"
+                    mobileActiveSubmenu === "contact"
+                      ? "max-h-48 opacity-100 mt-4"
+                      : "max-h-0 opacity-0",
                   )}
                 >
                   <div className="flex flex-col space-y-3 pl-4">

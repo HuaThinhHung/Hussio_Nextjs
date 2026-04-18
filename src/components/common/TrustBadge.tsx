@@ -14,10 +14,22 @@ export default function TrustBadge() {
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
           {siteConfig.trustBadges.map((item, index) => (
             <div key={item} className="flex items-center gap-3">
-              <svg className="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.4} d={iconPaths[index]} />
+              <svg
+                className="h-5 w-5 shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.4}
+                  d={iconPaths[index]}
+                />
               </svg>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.12em]">{item}</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.12em]">
+                {item}
+              </p>
             </div>
           ))}
         </div>

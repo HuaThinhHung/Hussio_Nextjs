@@ -10,27 +10,53 @@ export const metadata: Metadata = {
 
 const contacts = [
   { label: "Địa chỉ", value: siteConfig.address.full, href: null },
-  { label: "Facebook", value: siteConfig.social.facebook, href: siteConfig.social.facebook },
-  { label: "Shopee", value: siteConfig.social.shopee, href: siteConfig.social.shopee },
-  { label: "TikTok", value: siteConfig.social.tiktok, href: siteConfig.social.tiktok },
+  {
+    label: "Facebook",
+    value: siteConfig.social.facebook,
+    href: siteConfig.social.facebook,
+  },
+  {
+    label: "Shopee",
+    value: siteConfig.social.shopee,
+    href: siteConfig.social.shopee,
+  },
+  {
+    label: "TikTok",
+    value: siteConfig.social.tiktok,
+    href: siteConfig.social.tiktok,
+  },
 ];
 
 export default function ContactPage() {
   return (
     <div className="min-h-screen bg-white">
       <section className="container mx-auto px-4 py-12 md:py-20">
-        <h1 className="text-3xl font-black uppercase tracking-tight md:text-4xl">LIÊN HỆ HUSSIO</h1>
+        <h1 className="text-3xl font-black uppercase tracking-tight md:text-4xl">
+          LIÊN HỆ HUSSIO
+        </h1>
         <p className="mt-3 max-w-2xl text-sm text-zinc-600 md:text-base">
-          Website này giúp tăng nhận diện thương hiệu, SEO và độ tin cậy. Kênh mua sắm chính vẫn là các sàn TMĐT và mạng xã hội chính thức của HUSSIO.
+          Website này giúp tăng nhận diện thương hiệu, SEO và độ tin cậy. Kênh
+          mua sắm chính vẫn là các sàn TMĐT và mạng xã hội chính thức của
+          HUSSIO.
         </p>
 
         <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-12">
           <section className="lg:col-span-5">
-            <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">Thông tin liên hệ</h2>
+            <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">
+              Thông tin liên hệ
+            </h2>
             <ul className="mt-6 space-y-5">
               {contacts.map((item) => (
-                <li key={item.label} className="flex items-start gap-3 border-b border-zinc-200 pb-4">
-                  <svg className="mt-0.5 h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <li
+                  key={item.label}
+                  className="flex items-start gap-3 border-b border-zinc-200 pb-4"
+                >
+                  <svg
+                    className="mt-0.5 h-5 w-5 shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -47,13 +73,22 @@ export default function ContactPage() {
                     />
                   </svg>
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">{item.label}</p>
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
+                      {item.label}
+                    </p>
                     {item.href ? (
-                      <Link href={item.href} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block text-sm hover:underline underline-offset-4">
+                      <Link
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-1 inline-block text-sm hover:underline underline-offset-4"
+                      >
                         {item.value}
                       </Link>
                     ) : (
-                      <address className="mt-1 not-italic text-sm leading-relaxed">{item.value}</address>
+                      <address className="mt-1 not-italic text-sm leading-relaxed">
+                        {item.value}
+                      </address>
                     )}
                   </div>
                 </li>
@@ -65,15 +100,32 @@ export default function ContactPage() {
           </section>
 
           <section className="lg:col-span-7">
-            <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">Gửi tin nhắn cho HUSSIO</h2>
+            <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">
+              Gửi tin nhắn cho HUSSIO
+            </h2>
             <form className="mt-6 space-y-4 border border-zinc-200 p-6 md:p-8">
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <input className="h-11 border border-zinc-300 px-3 text-sm focus:border-black focus:outline-none" placeholder="Họ và tên" />
-                <input className="h-11 border border-zinc-300 px-3 text-sm focus:border-black focus:outline-none" placeholder="Số điện thoại" />
+                <input
+                  className="h-11 border border-zinc-300 px-3 text-sm focus:border-black focus:outline-none"
+                  placeholder="Họ và tên"
+                />
+                <input
+                  className="h-11 border border-zinc-300 px-3 text-sm focus:border-black focus:outline-none"
+                  placeholder="Số điện thoại"
+                />
               </div>
-              <input className="h-11 w-full border border-zinc-300 px-3 text-sm focus:border-black focus:outline-none" placeholder="Email" />
-              <textarea className="min-h-32 w-full border border-zinc-300 p-3 text-sm focus:border-black focus:outline-none" placeholder="Nội dung bạn cần hỗ trợ" />
-              <button type="submit" className="inline-flex h-11 items-center justify-center border border-black bg-black px-6 text-xs font-semibold uppercase tracking-[0.14em] text-white hover:bg-zinc-800">
+              <input
+                className="h-11 w-full border border-zinc-300 px-3 text-sm focus:border-black focus:outline-none"
+                placeholder="Email"
+              />
+              <textarea
+                className="min-h-32 w-full border border-zinc-300 p-3 text-sm focus:border-black focus:outline-none"
+                placeholder="Nội dung bạn cần hỗ trợ"
+              />
+              <button
+                type="submit"
+                className="inline-flex h-11 items-center justify-center border border-black bg-black px-6 text-xs font-semibold uppercase tracking-[0.14em] text-white hover:bg-zinc-800"
+              >
                 Gửi tin nhắn
               </button>
             </form>
